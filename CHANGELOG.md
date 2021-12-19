@@ -1,9 +1,7 @@
 # Change Log
 
-All notable changes to the "adobe-extension-devtools" extension will be documented in this file.
+## [0.0.1] - 2021-12-20
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+### Added
 
-## [Unreleased]
-
-- Initial release
+- support ExtendScript `// @include './modulePath.jsx'` jump to definition file

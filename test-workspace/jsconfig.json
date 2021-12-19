@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "module": "None",
+        "lib": [],
+        "rootDir": "."
+    },
+    "include": [
+        "./**/*.jsx",
+        "./**/*.d.ts",
+        "../node_modules/types-for-adobe/AfterEffects/2018/**/*.d.ts",
+        "../node_modules/types-for-adobe/shared/**/*.d.ts"
+    ]
+}

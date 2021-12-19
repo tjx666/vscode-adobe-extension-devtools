@@ -1,0 +1,5 @@
+{
+    "files.associations": {
+        "**/test-workspace/**/*.jsx": "javascript",
+    },
+}

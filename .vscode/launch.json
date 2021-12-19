@@ -39,6 +39,12 @@
             ],
             "sourceMaps": true,
             "preLaunchTask": "${defaultBuildTask}"
-        }
+        },
+        {
+            "name": "AE JSX",
+            "type": "extendscript-debug",
+            "request": "launch",
+            "program": "${file}"
+        },
     ]
 }
