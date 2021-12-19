@@ -1,0 +1,18 @@
+# dotfiles
+.vscode/
+.gitignore
+**/tsconfig.json
+.eslintrc.json
+.prettierrc
+.npmrc
+
+# source code
+src/
+**/*.map
+**/*.ts
+
+# test and output
+test/
+.vscode-test/
+test-workspace/
+out/test/
