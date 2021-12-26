@@ -6,5 +6,6 @@
 
 ## TODOs
 
-- JSX module definition jump
-- AE layer properties tree view
+- [x] JSX module definition jump
+- [ ] AE layer properties tree view
+- [ ] Snippets

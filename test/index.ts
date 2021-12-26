@@ -1,6 +1,6 @@
 import glob from 'glob';
 import Mocha from 'mocha';
-import path from 'path';
+import pathUtils from 'path';
 
 export function run(testsRoot: string, cb: (error: any, failures?: number) => void): void {
     const mocha = new Mocha({ color: true });
@@ -12,7 +12,7 @@ export function run(testsRoot: string, cb: (error: any, failures?: number) => vo
         }
 
         // Add files to the test suite
-        for (const f of files) mocha.addFile(path.resolve(testsRoot, f));
+        for (const f of files) mocha.addFile(pathUtils.resolve(testsRoot, f));
 
         try {
             // Run the mocha test

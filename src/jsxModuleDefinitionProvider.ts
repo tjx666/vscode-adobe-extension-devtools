@@ -1,6 +1,6 @@
 import fs from 'fs';
 import fsAsync from 'fs/promises';
-import path from 'path';
+import pathUtils from 'path';
 
 import { Position, Uri, Range } from 'vscode';
 import type { CancellationToken, DefinitionProvider, TextDocument, DefinitionLink } from 'vscode';
@@ -22,7 +22,7 @@ class JsxModuleDefinitionProvider implements DefinitionProvider {
         // only support javascript file which extension is .jsx
         if (!fileName || !fileName.endsWith('.jsx')) return;
 
-        const directory = path.dirname(fileName);
+        const directory = pathUtils.dirname(fileName);
         const line = document.lineAt(position);
         const lineText = line.text;
         // see https://extendscript.docsforadobe.dev/extendscript-tools-features/preprocessor-directives.html#include-file
@@ -32,7 +32,7 @@ class JsxModuleDefinitionProvider implements DefinitionProvider {
         if (!matchResult) return;
 
         const modulePath = matchResult[1];
-        const definitionFilePath = path.resolve(directory, modulePath);
+        const definitionFilePath = pathUtils.resolve(directory, modulePath);
 
         if (await pathExists(definitionFilePath)) {
             const modulePathIndex = lineText.indexOf(modulePath);

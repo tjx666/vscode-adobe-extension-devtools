@@ -17,6 +17,7 @@ module.exports = {
     rules: {
         '@typescript-eslint/no-unused-vars': OFF,
         '@typescript-eslint/no-explicit-any': OFF,
+        '@typescript-eslint/no-use-before-define': ERROR,
 
         'no-empty': OFF,
 
@@ -35,7 +36,5 @@ module.exports = {
         'max-params': ERROR,
         'new-cap': ERROR,
         'no-invalid-this': ERROR,
-        'no-unused-expressions': ERROR,
-        'no-use-before-define': [ERROR, { functions: false }],
     },
 };

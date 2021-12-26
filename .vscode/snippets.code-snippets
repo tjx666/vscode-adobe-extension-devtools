@@ -1,0 +1,26 @@
+{
+    "Immediately Invoked Function Expression": {
+        "scope": "javascript,typescript,typescriptreact",
+        "prefix": "iife",
+        "body": [
+			"(function(){",
+			"    $2",
+			"})();"
+		],
+        "description": "Create Immediately Invoked Function Expression"
+    },
+    "use strict": {
+        "scope": "javascript,typescript,typescriptreact",
+        "prefix": "ust",
+        "body": [
+			"'use strict';"
+		],
+        "description": "use strict mode"
+    },
+    "$.writeln()": {
+        "scope": "javascript",
+        "prefix": "wl",
+        "body": "$.writeln($1);",
+        "description": "ExtendScript output to stdio"
+    },
+}
