@@ -7,5 +7,5 @@
 ## TODOs
 
 - [x] JSX module definition jump
-- [ ] AE layer properties tree view
+- [ ] AE Composition Tree View
 - [ ] Snippets
