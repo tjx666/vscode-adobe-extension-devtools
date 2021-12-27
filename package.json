@@ -30,23 +30,23 @@
         "views": {
             "explorer": [
                 {
-                    "id": "aeProjectOutline",
-                    "name": "AE Project Outline"
+                    "id": "aeCompositionOutline",
+                    "name": "AE Composition Outline"
                 }
             ]
         },
         "menus": {
             "view/title": [
                 {
-                    "command": "jsonOutline.refresh",
-                    "when": "view == aeProjectOutline",
+                    "command": "adobeExtensionDevtools.refreshAeCompositionOutline",
+                    "when": "view == aeCompositionOutline",
                     "group": "navigation"
                 }
             ]
         },
         "commands": [
             {
-                "command": "adobeExtensionDevtools.refreshAeProjectOutline",
+                "command": "adobeExtensionDevtools.refreshAeCompositionOutline",
                 "title": "Refresh AE Project Outline",
                 "icon": "$(extensions-refresh)"
             }

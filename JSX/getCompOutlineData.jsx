@@ -8,7 +8,7 @@
     /**
      * @param {property} value
      */
-    function parsePropertyValue(property) {
+    function parsePropertyValue(property, value) {
         var valueType = property.propertyValueType;
         if (valueType === PropertyValueType.NO_VALUE) {
             return null;
@@ -16,7 +16,7 @@
             return {};
         }
 
-        return property.value;
+        return value;
     }
 
     /**
@@ -32,10 +32,13 @@
                 path: path.concat(i),
                 index: i,
                 time: property.keyTime(i),
-                value: parsePropertyValue(property.keyValue(i)),
+                value: parsePropertyValue(property, property.keyValue(i)),
             });
         }
-        return keyframes;
+        return {
+            type: 'Keyframes',
+            frames: keyframes,
+        };
     }
 
     /**
@@ -146,12 +149,7 @@
     }
 
     function main() {
-        var json = JSON.stringify(getCompOutlineData(), null, 2);
-        var file = new File('/Users/yutengjing/code/adobe-extension-developer-tools/JSX/data.json');
-        file.encoding = 'UTF-8';
-        file.open('w');
-        file.write(json);
-        file.close();
+        print(JSON.stringify(getCompOutlineData()));
     }
 
     main();

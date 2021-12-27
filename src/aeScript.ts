@@ -1,4 +1,5 @@
 import fs from 'fs/promises';
+import { constants as FS_CONSTANTS } from 'fs';
 import pathUtils from 'path';
 import esc from 'escape-string-applescript';
 import execa from 'execa';
@@ -29,6 +30,13 @@ function getFileNameWithoutExt(path: string) {
     return basename.slice(0, basename.lastIndexOf(pathUtils.extname(path)));
 }
 
+function pathExists(path: string) {
+    return fs
+        .access(path, FS_CONSTANTS.F_OK)
+        .then(() => true)
+        .catch(() => false);
+}
+
 async function evalFile(scriptPath) {
     const ae = await findAe();
     const uuid = uuidV4();
@@ -52,18 +60,21 @@ async function evalFile(scriptPath) {
     const appleScript = `tell application "${ae}"
     DoScript "${esc(script, { quotes: 'double' })}"
     end tell`;
-    await fs.writeFile(appleScriptPath, appleScript, 'utf-8');
+    await Promise.all([
+        await fs.writeFile(jsxOutputFilePath, '', 'utf-8'),
+        await fs.writeFile(appleScriptPath, appleScript, 'utf-8'),
+    ]);
     await execa('osascript', [appleScriptPath]);
 
     const output = await fs.readFile(jsxOutputFilePath, 'utf-8');
     let result: any;
     try {
-        result = JSON.parse(result);
+        result = JSON.parse(output);
     } catch {
         result = output;
     }
     await Promise.all([fs.rm(appleScriptPath), fs.rm(jsxOutputFilePath)]);
-    
+
     return result;
 }
 

@@ -17,7 +17,10 @@
             "skipFiles": [
                 "<node_internals>/**",
                 "**/node_modules/**",
-                "**/resources/app/out/vs/**"
+                "**/resources/app/out/vs/**",
+                "**/Contents/Resources/app/out/vs/workbench/services/extensions/node/extensionHostProcess.js",
+                "**/.vscode-insiders/extensions/",
+                "**/.vscode/extensions/"
             ],
             "sourceMaps": true,
             "preLaunchTask": "${defaultBuildTask}"
