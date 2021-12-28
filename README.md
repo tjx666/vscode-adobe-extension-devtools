@@ -3,6 +3,7 @@
 ## Features
 
 - support ExtendScript `// @include './modulePath.jsx'` jump to definition file
+- AE Composition Tree View, for MacOS Only Now
 
 ## TODOs
 

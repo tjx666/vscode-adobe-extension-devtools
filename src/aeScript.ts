@@ -1,5 +1,4 @@
 import fs from 'fs/promises';
-import { constants as FS_CONSTANTS } from 'fs';
 import pathUtils from 'path';
 import esc from 'escape-string-applescript';
 import execa from 'execa';
@@ -28,13 +27,6 @@ async function findAe() {
 function getFileNameWithoutExt(path: string) {
     const basename = pathUtils.basename(path);
     return basename.slice(0, basename.lastIndexOf(pathUtils.extname(path)));
-}
-
-function pathExists(path: string) {
-    return fs
-        .access(path, FS_CONSTANTS.F_OK)
-        .then(() => true)
-        .catch(() => false);
 }
 
 async function evalFile(scriptPath) {

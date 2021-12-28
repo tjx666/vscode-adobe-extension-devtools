@@ -6,13 +6,13 @@
     }
 
     /**
-     * @param {property} value
+     * @param {PropertyValueType} propertyValueType
+     * @param {any} value
      */
-    function parsePropertyValue(property, value) {
-        var valueType = property.propertyValueType;
-        if (valueType === PropertyValueType.NO_VALUE) {
+    function parsePropertyValue(propertyValueType, value) {
+        if (propertyValueType === PropertyValueType.NO_VALUE) {
             return null;
-        } else if (valueType === PropertyValueType.TEXT_DOCUMENT) {
+        } else if (propertyValueType === PropertyValueType.TEXT_DOCUMENT) {
             return {};
         }
 
@@ -32,7 +32,7 @@
                 path: path.concat(i),
                 index: i,
                 time: property.keyTime(i),
-                value: parsePropertyValue(property, property.keyValue(i)),
+                value: parsePropertyValue(property.propertyType, property.keyValue(i)),
             });
         }
         return {
@@ -69,7 +69,7 @@
             if (containsKeyframe) {
                 result.keyframes = getKeyframes(property, currentPath);
             } else {
-                result.value = parsePropertyValue(property);
+                result.value = parsePropertyValue(property.propertyType, property.value);
             }
 
             return result;

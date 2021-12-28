@@ -1,17 +1,19 @@
 import { resolve } from 'path';
 import vscode, { TreeItemCollapsibleState } from 'vscode';
+
 import {
+    CompositionNode,
+    JsonValueNode,
+    KeyframeNode,
+    KeyframesNode,
     LayerNode,
     PropertyGroupNode,
     PropertyNode,
     ViewNode,
-    KeyframeNode,
-    JsonValueNode,
-    CompositionNode,
-    KeyframesNode,
 } from './aeModels';
 import evalFile from './aeScript';
 import { JSX_DIR } from './constants';
+import { toFixed } from './utils';
 
 export default class CompositionOutlineProvider implements vscode.TreeDataProvider<ViewNode> {
     private _onDidChangeTreeData: vscode.EventEmitter<ViewNode | void> =
@@ -48,7 +50,7 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         } else if (element.type === 'Keyframe') {
             const keyframe = element as KeyframeNode;
             return {
-                label: '[' + keyframe.index + `] - ${keyframe.time.toFixed(3)}`,
+                label: '[' + keyframe.index + `] - ${toFixed(keyframe.time)}`,
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
             };
         } else if (element.type === 'JsonValue') {
@@ -73,21 +75,21 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         return null;
     }
 
-    getJsonValueChildren(jsonValue: JsonValueNode): ViewNode[] {
-        if (Array.isArray(jsonValue.value)) {
-            return jsonValue.value.map((e, i) => {
+    getJsonValueNodeChildren(jsonValueNode: JsonValueNode): ViewNode[] {
+        if (Array.isArray(jsonValueNode.value)) {
+            return jsonValueNode.value.map((e, i) => {
                 return {
                     type: 'JsonValue',
                     key: `${i}`,
                     value: e,
                 };
             });
-        } else if (jsonValue.value instanceof Object) {
-            return Object.keys(jsonValue.value).map((k) => {
+        } else if (jsonValueNode.value instanceof Object) {
+            return Object.keys(jsonValueNode.value).map((k) => {
                 return {
                     type: 'JsonValue',
                     key: k,
-                    value: jsonValue.value[k],
+                    value: jsonValueNode.value[k],
                 };
             });
         } else {
@@ -95,8 +97,8 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         }
     }
 
-    async getChildren(element?: ViewNode): Promise<ViewNode[]> {
-        if (!element) {
+    async getChildren(node?: ViewNode): Promise<ViewNode[]> {
+        if (!node) {
             const scriptPath = resolve(JSX_DIR, 'getCompOutlineData.jsx');
             this.composition = await evalFile(scriptPath);
             if (this.composition === null) return [];
@@ -105,14 +107,14 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
             return layers;
         }
 
-        if (element.type === 'Layer') {
-            const properties = (element as LayerNode).properties;
+        if (node.type === 'Layer') {
+            const properties = (node as LayerNode).properties;
             return properties;
-        } else if (element.type === 'PropertyGroup') {
-            const properties = (element as PropertyGroupNode).properties;
+        } else if (node.type === 'PropertyGroup') {
+            const properties = (node as PropertyGroupNode).properties;
             return properties;
-        } else if (element.type === 'Property') {
-            const property = element as PropertyNode;
+        } else if (node.type === 'Property') {
+            const property = node as PropertyNode;
             const { value, keyframes } = property;
             const kys: JsonValueNode[] = [
                 {
@@ -126,24 +128,25 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
                     value: property.matchName,
                 },
             ];
+
             if (value !== undefined) {
                 return [
                     ...kys,
                     {
                         type: 'JsonValue',
                         key: 'value',
-                        value: (element as JsonValueNode).value,
+                        value: (node as JsonValueNode).value,
                     },
                 ];
-            } else {
+            }
+            // contains keyframes
+            else {
                 return [...kys, keyframes as KeyframesNode];
             }
-        } else if (element.type === 'JsonValue') {
-            return this.getJsonValueChildren(element as JsonValueNode);
-        } else if (element.type === 'Keyframes') {
-            return (element as KeyframesNode).frames;
-        } else if (element.type === 'Keyframe') {
-            const keyframe = element as KeyframeNode;
+        } else if (node.type === 'Keyframes') {
+            return (node as KeyframesNode).frames;
+        } else if (node.type === 'Keyframe') {
+            const keyframe = node as KeyframeNode;
             const kvs: JsonValueNode[] = [
                 {
                     type: 'JsonValue',
@@ -162,6 +165,10 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
                 },
             ];
             return kvs;
+        } else if (node.type === 'JsonValue') {
+            return this.getJsonValueNodeChildren(node as JsonValueNode);
         }
+
+        return [];
     }
 }
