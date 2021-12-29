@@ -42,6 +42,16 @@
                     "when": "view == aeCompositionOutline",
                     "group": "navigation"
                 }
+            ],
+            "view/item/context": [
+				{
+					"command": "adobeExtensionDevtools.copyPropertyPath",
+					"when": "view == aeCompositionOutline && viewItem == Property"
+				},
+				{
+					"command": "adobeExtensionDevtools.copyPropertyPath",
+					"when": "view == aeCompositionOutline && viewItem == PropertyGroup"
+				}
             ]
         },
         "commands": [
@@ -49,6 +59,10 @@
                 "command": "adobeExtensionDevtools.refreshAeCompositionOutline",
                 "title": "Refresh AE Project Outline",
                 "icon": "$(extensions-refresh)"
+            },
+            {
+                "command": "adobeExtensionDevtools.copyPropertyPath",
+                "title": "Copy Property Path"
             }
         ]
     },

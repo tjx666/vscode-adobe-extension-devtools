@@ -1,5 +1,6 @@
 import { resolve } from 'path';
 import vscode from 'vscode';
+import { ViewNode } from './aeModels';
 
 import evalFile from './aeScript';
 import CompositionOutlineProvider from './compositionOutline';
@@ -28,6 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
     });
     vscode.commands.registerCommand('adobeExtensionDevtools.refreshAeCompositionOutline', () =>
         compositionOutlineProvider.refresh(),
+    );
+    vscode.commands.registerCommand('adobeExtensionDevtools.copyPropertyPath', (node: ViewNode) =>
+        compositionOutlineProvider.copyPropertyPath(node),
     );
 }
 

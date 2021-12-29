@@ -26,58 +26,78 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         this._onDidChangeTreeData.fire();
     }
 
-    getTreeItem(element: ViewNode): vscode.TreeItem {
-        if (element.type === 'Layer') {
-            const layer = element as LayerNode;
+    copyPropertyPath(node: ViewNode) {
+        if (node.type === 'PropertyGroup' || node.type === 'Property') {
+            const propertyPath = (node as PropertyNode).path.slice(1).map((v) => {
+                if (typeof v === 'string') {
+                    return `'${v}'`;
+                }
+                return v;
+            });
+            vscode.env.clipboard.writeText(`[${propertyPath.join(', ')}]`);
+        }
+    }
+
+    getTreeItem(node: ViewNode): vscode.TreeItem {
+        if (node.type === 'Layer') {
+            const layer = node as LayerNode;
             return {
                 label: layer.name,
                 tooltip: new MarkdownString('`Layer:` ' + layer.name),
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
+                contextValue: 'Layer',
             };
-        } else if (element.type === 'Property') {
-            const property = element as PropertyNode;
+        } else if (node.type === 'Property') {
+            const property = node as PropertyNode;
             return {
                 label: property.name,
                 tooltip: new MarkdownString('`Property:` ' + property.matchName),
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
+                contextValue: 'Property',
             };
-        } else if (element.type === 'PropertyGroup') {
-            const propertyGroup = element as PropertyGroupNode;
+        } else if (node.type === 'PropertyGroup') {
+            const propertyGroup = node as PropertyGroupNode;
             return {
                 label: propertyGroup.name,
                 tooltip: new MarkdownString('`PropertyGroup:` ' + propertyGroup.matchName),
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
+                contextValue: 'PropertyGroup',
             };
-        } else if (element.type === 'Keyframes') {
+        } else if (node.type === 'Keyframes') {
             return {
-                label: 'keyframes  [' + (element as KeyframesNode).frames.length + ']',
+                label: 'keyframes  [' + (node as KeyframesNode).frames.length + ']',
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
+                contextValue: 'Keyframes',
             };
-        } else if (element.type === 'Keyframe') {
-            const keyframe = element as KeyframeNode;
+        } else if (node.type === 'Keyframe') {
+            const keyframe = node as KeyframeNode;
             return {
                 label: '[' + keyframe.index + `] - ${toFixed(keyframe.time)}`,
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
+                contextValue: 'Keyframe',
             };
-        } else if (element.type === 'JsonValue') {
-            const jsonValue = element as JsonValueNode;
+        } else if (node.type === 'JsonValue') {
+            const jsonValue = node as JsonValueNode;
             if (Array.isArray(jsonValue.value)) {
                 return {
                     label: jsonValue.key + ' [' + jsonValue.value.length + ']',
                     tooltip: jsonValue.value.toString(),
                     collapsibleState: TreeItemCollapsibleState.Collapsed,
+                    contextValue: 'JsonValueArray',
                 };
             } else if (jsonValue.value instanceof Object) {
                 return {
                     label: jsonValue.key + ' {' + Object.keys(jsonValue.value).length + '}',
                     tooltip: JSON.stringify(jsonValue.value),
                     collapsibleState: TreeItemCollapsibleState.Collapsed,
+                    contextValue: 'JsonValueObject',
                 };
             } else {
                 return {
                     label: `${jsonValue.key}: ${jsonValue.value}`,
                     tooltip: `${jsonValue.value}`,
                     collapsibleState: TreeItemCollapsibleState.None,
+                    contextValue: 'JsonValue',
                 };
             }
         }
