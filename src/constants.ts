@@ -7,5 +7,6 @@ const EXTENSION_DIR = vscode.extensions.getExtension(
     'yutengjing.adobe-extension-devtools',
 ).extensionPath;
 const JSX_DIR = pathUtils.resolve(EXTENSION_DIR, 'JSX');
+const SYSTEM = process.platform === 'win32' ? 'Window': 'MacOS'
 
-export { DATA_DIR, EXTENSION_DIR, JSX_DIR };
+export { DATA_DIR, EXTENSION_DIR, JSX_DIR, SYSTEM };

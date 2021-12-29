@@ -22,7 +22,10 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(jsxModuleDefinitionProvider);
 
     const compositionOutlineProvider = new CompositionOutlineProvider();
-    vscode.window.registerTreeDataProvider('aeCompositionOutline', compositionOutlineProvider);
+    vscode.window.createTreeView('aeCompositionOutline', {
+        treeDataProvider: compositionOutlineProvider,
+        showCollapseAll: true,
+    });
     vscode.commands.registerCommand('adobeExtensionDevtools.refreshAeCompositionOutline', () =>
         compositionOutlineProvider.refresh(),
     );

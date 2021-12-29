@@ -1,5 +1,5 @@
 import { resolve } from 'path';
-import vscode, { TreeItemCollapsibleState } from 'vscode';
+import vscode, { MarkdownString, TreeItemCollapsibleState } from 'vscode';
 
 import {
     CompositionNode,
@@ -12,7 +12,7 @@ import {
     ViewNode,
 } from './aeModels';
 import evalFile from './aeScript';
-import { JSX_DIR } from './constants';
+import { JSX_DIR, SYSTEM } from './constants';
 import { toFixed } from './utils';
 
 export default class CompositionOutlineProvider implements vscode.TreeDataProvider<ViewNode> {
@@ -28,23 +28,29 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
 
     getTreeItem(element: ViewNode): vscode.TreeItem {
         if (element.type === 'Layer') {
+            const layer = element as LayerNode;
             return {
-                label: 'Layer  ' + (element as LayerNode).name,
+                label: layer.name,
+                tooltip: new MarkdownString('`Layer:` ' + layer.name),
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
             };
         } else if (element.type === 'Property') {
+            const property = element as PropertyNode;
             return {
-                label: 'Property  ' + (element as PropertyNode).name,
+                label: property.name,
+                tooltip: new MarkdownString('`Property:` ' + property.matchName),
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
             };
         } else if (element.type === 'PropertyGroup') {
+            const propertyGroup = element as PropertyGroupNode;
             return {
-                label: 'PropertyGroup  ' + (element as PropertyGroupNode).name,
+                label: propertyGroup.name,
+                tooltip: new MarkdownString('`PropertyGroup:` ' + propertyGroup.matchName),
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
             };
         } else if (element.type === 'Keyframes') {
             return {
-                label: 'Keyframes  [' + (element as KeyframesNode).frames.length + ']',
+                label: 'keyframes  [' + (element as KeyframesNode).frames.length + ']',
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
             };
         } else if (element.type === 'Keyframe') {
@@ -58,16 +64,19 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
             if (Array.isArray(jsonValue.value)) {
                 return {
                     label: jsonValue.key + ' [' + jsonValue.value.length + ']',
+                    tooltip: jsonValue.value.toString(),
                     collapsibleState: TreeItemCollapsibleState.Collapsed,
                 };
             } else if (jsonValue.value instanceof Object) {
                 return {
                     label: jsonValue.key + ' {' + Object.keys(jsonValue.value).length + '}',
+                    tooltip: JSON.stringify(jsonValue.value),
                     collapsibleState: TreeItemCollapsibleState.Collapsed,
                 };
             } else {
                 return {
                     label: `${jsonValue.key}: ${jsonValue.value}`,
+                    tooltip: `${jsonValue.value}`,
                     collapsibleState: TreeItemCollapsibleState.None,
                 };
             }
@@ -98,6 +107,9 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
     }
 
     async getChildren(node?: ViewNode): Promise<ViewNode[]> {
+        // only support MacOS now
+        if (SYSTEM === 'Window') return [];
+
         if (!node) {
             const scriptPath = resolve(JSX_DIR, 'getCompOutlineData.jsx');
             this.composition = await evalFile(scriptPath);
