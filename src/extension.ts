@@ -1,17 +1,8 @@
-import { resolve } from 'path';
 import vscode from 'vscode';
 import { ViewNode } from './aeModels';
 
-import evalFile from './aeScript';
 import CompositionOutlineProvider from './compositionOutline';
-import { JSX_DIR } from './constants';
 import JsxModuleDefinitionProvider from './jsxModuleDefinitionProvider';
-
-async function test() {
-    const scriptPath = resolve(JSX_DIR, 'getCompOutlineData.jsx');
-    const result = await evalFile(scriptPath);
-    console.log(result);
-}
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);

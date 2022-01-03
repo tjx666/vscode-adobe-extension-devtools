@@ -15,8 +15,9 @@ module.exports = {
     },
     plugins: ['@typescript-eslint'],
     rules: {
-        '@typescript-eslint/no-unused-vars': OFF,
         '@typescript-eslint/no-explicit-any': OFF,
+        '@typescript-eslint/no-non-null-assertion': OFF,
+        '@typescript-eslint/no-unused-vars': OFF,
         '@typescript-eslint/no-use-before-define': ERROR,
 
         'no-empty': OFF,

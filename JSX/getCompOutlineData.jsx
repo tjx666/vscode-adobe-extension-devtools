@@ -1,18 +1,88 @@
 (function () {
     'use strict';
 
+    var configuration = {
+        displayedLayerProperties: [
+            'ADBE Transform Group',
+            'ADBE Audio Group',
+            'ADBE Effect Parade',
+            'ADBE Layer Styles',
+            'ADBE Mask Parade',
+        ],
+        excludePropertyPaths: [],
+    };
+
+    if (typeof __adobeExtensionDevtools__ !== 'undefined') {
+        configuration.displayedLayerProperties = args.displayedLayerProperties;
+        configuration.excludePropertyPaths = args.excludePropertyPaths;
+    }
+
     function isLayer(object) {
         return 'nullLayer' in object;
     }
 
     /**
-     * @param {PropertyValueType} propertyValueType
-     * @param {any} value
+     * @param {Array<number|string>} path1
+     * @param {Array<number|string>} path2
+     * @returns {boolean}
      */
-    function parsePropertyValue(propertyValueType, value) {
+    function propertyPathEqual(path1, path2) {
+        if (path1.length !== path2.length) return false;
+
+        for (var i = 0, len = path1.length; i < len; i++) {
+            if (path1[i] !== path2[i]) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param {Property|PropertyGroup} property
+     * @param {Array<number|string>} propertyPath
+     * @returns {boolean}
+     */
+    function showProperty(property, propertyPath) {
+        var shouldDisplay = property.enabled;
+        var i;
+
+        if (shouldDisplay) {
+            var isLayerProperty = propertyPath.length === 1;
+            if (isLayerProperty) {
+                for (i = 0; i < configuration.displayedLayerProperties.length; i++) {
+                    if (configuration.displayedLayerProperties[i] === propertyPath[0]) {
+                        break;
+                    }
+                }
+            }
+        } else {
+            return false;
+        }
+
+        if (i === configuration.displayedLayerProperties.length) {
+            return false;
+        }
+
+        for (i = 0; i < configuration.excludePropertyPaths.length; i++) {
+            if (propertyPathEqual(configuration.excludePropertyPaths[i], propertyPath)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param {Property} property
+     * @param {number} [keyIndex]
+     */
+    function parsePropertyValue(property, keyIndex) {
+        var propertyValueType = property.propertyValueType;
         if (propertyValueType === PropertyValueType.NO_VALUE) {
             return null;
-        } else if (propertyValueType === PropertyValueType.TEXT_DOCUMENT) {
+        }
+
+        var value = keyIndex === undefined ? property.value : property.keyValue(keyIndex);
+        if (propertyValueType === PropertyValueType.TEXT_DOCUMENT) {
             return {};
         }
 
@@ -32,7 +102,7 @@
                 path: path.concat(i),
                 index: i,
                 time: property.keyTime(i),
-                value: parsePropertyValue(property.propertyType, property.keyValue(i)),
+                value: parsePropertyValue(property, i),
             });
         }
         return {
@@ -46,17 +116,20 @@
      */
     function getProperties(layer, path) {
         var containsProperties = layer.numProperties !== undefined;
-        var displayProperties = ['ADBE Transform Group'];
         /** @type {Property} */
         var property;
         var matchName;
         var currentPath;
         var result;
+        var props;
 
         if (!containsProperties) {
             property = layer;
             matchName = layer.matchName;
             currentPath = path.concat(matchName);
+            shouldDisplay = showProperty(property, currentPath.slice(1));
+            if (!shouldDisplay) return null;
+
             result = {
                 type: 'Property',
                 index: property.propertyIndex,
@@ -69,38 +142,32 @@
             if (containsKeyframe) {
                 result.keyframes = getKeyframes(property, currentPath);
             } else {
-                result.value = parsePropertyValue(property.propertyType, property.value);
+                result.value = parsePropertyValue(property);
             }
 
             return result;
         }
 
         var isRealLayer = isLayer(layer);
-        var i, j;
+        var i;
         var shouldDisplay;
         if (isRealLayer) {
             result = [];
             for (i = 1; i <= layer.numProperties; i++) {
                 property = layer.property(i);
-                shouldDisplay = property.enabled;
-                if (shouldDisplay) {
-                    for (j = 0; j < displayProperties.length; j++) {
-                        if (property.matchName === displayProperties[j]) {
-                            break;
-                        }
-                    }
-                }
-                if (j === displayProperties.length) {
-                    shouldDisplay = false;
-                }
-
-                if (shouldDisplay) {
-                    result.push(getProperties(property, path));
+                props = getProperties(property, path);
+                if (props) {
+                    result.push(props);
                 }
             }
+            return result;
         } else {
             matchName = layer.matchName;
             currentPath = path.concat(matchName);
+            shouldDisplay = showProperty(layer, currentPath.slice(1));
+
+            if (!shouldDisplay) return null;
+
             result = {
                 type: 'PropertyGroup',
                 index: layer.propertyIndex,
@@ -112,11 +179,14 @@
 
             for (i = 1; i <= layer.numProperties; i++) {
                 property = layer.property(i);
-                if (property.enabled) result.properties.push(getProperties(property, currentPath));
+                props = getProperties(property, currentPath);
+                if (props) {
+                    result.properties.push(props);
+                }
             }
-        }
 
-        return result;
+            return result;
+        }
     }
 
     function getCompOutlineData() {
@@ -150,6 +220,7 @@
 
     function main() {
         print(JSON.stringify(getCompOutlineData()));
+        // $.writeln(JSON.stringify(getCompOutlineData(), null, 2));
     }
 
     main();

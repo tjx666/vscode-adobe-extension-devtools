@@ -1,16 +1,7 @@
-import fs from 'fs';
-import fsAsync from 'fs/promises';
 import pathUtils from 'path';
-
 import { Position, Uri, Range } from 'vscode';
 import type { CancellationToken, DefinitionProvider, TextDocument, DefinitionLink } from 'vscode';
-
-function pathExists(localPath: string) {
-    return fsAsync
-        .access(localPath, fs.constants.F_OK)
-        .then(() => true)
-        .catch(() => false);
-}
+import { pathExists } from './utils';
 
 class JsxModuleDefinitionProvider implements DefinitionProvider {
     async provideDefinition(
@@ -48,6 +39,8 @@ class JsxModuleDefinitionProvider implements DefinitionProvider {
             };
             return [definitionLink];
         }
+
+        return undefined;
     }
 }
 

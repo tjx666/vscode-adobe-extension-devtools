@@ -1,5 +1,7 @@
 (function(){
-    var l = app.project.activeItem.layers[1];
-    var comp = app.project.activeItem;
-    $.writeln(app.project.activeItem.layers[1].property(1) instanceof PropertyBase);
+    /** @type {AVLayer} */
+    var l = app.project.activeItem.layers[10];
+    for (var i = 1; i <= l.numProperties; i++) {
+        $.writeln(l.property(i).matchName);
+    }
 })();

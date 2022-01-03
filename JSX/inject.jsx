@@ -1,4 +1,6 @@
 (function () {
+    var __adobeExtensionDevtools__ = true;
+    
     function print(str) {
         var file = new File(__output_file__);
         file.open('a');
@@ -10,6 +12,8 @@
     function println(str) {
         print(str + '\n');
     }
+
+    // ${args}
 
     // ${executeScriptCode}
 })();

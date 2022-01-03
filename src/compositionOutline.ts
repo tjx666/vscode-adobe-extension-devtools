@@ -12,15 +12,16 @@ import {
     ViewNode,
 } from './aeModels';
 import evalFile from './aeScript';
+import configuration from './configuration';
 import { JSX_DIR, SYSTEM } from './constants';
 import { toFixed } from './utils';
 
 export default class CompositionOutlineProvider implements vscode.TreeDataProvider<ViewNode> {
     private _onDidChangeTreeData: vscode.EventEmitter<ViewNode | void> =
-        new vscode.EventEmitter<ViewNode | null>();
+        new vscode.EventEmitter<ViewNode | void>();
     readonly onDidChangeTreeData: vscode.Event<ViewNode | void> = this._onDidChangeTreeData.event;
 
-    private composition: CompositionNode;
+    private composition: CompositionNode | undefined | null;
 
     refresh() {
         this._onDidChangeTreeData.fire();
@@ -101,7 +102,8 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
                 };
             }
         }
-        return null;
+
+        return {};
     }
 
     getJsonValueNodeChildren(jsonValueNode: JsonValueNode): ViewNode[] {
@@ -131,11 +133,17 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         if (SYSTEM === 'Window') return [];
 
         if (!node) {
+            configuration.update();
             const scriptPath = resolve(JSX_DIR, 'getCompOutlineData.jsx');
-            this.composition = await evalFile(scriptPath);
+            this.composition = await evalFile(scriptPath, {
+                argumentObject: {
+                    displayedLayerProperties: configuration.displayedLayerProperties,
+                    excludePropertyPaths: configuration.excludePropertyPaths,
+                },
+            });
             if (this.composition === null) return [];
 
-            const layers: LayerNode[] = this.composition.layers;
+            const layers: LayerNode[] = this.composition!.layers;
             return layers;
         }
 

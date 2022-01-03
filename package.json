@@ -44,14 +44,14 @@
                 }
             ],
             "view/item/context": [
-				{
-					"command": "adobeExtensionDevtools.copyPropertyPath",
-					"when": "view == aeCompositionOutline && viewItem == Property"
-				},
-				{
-					"command": "adobeExtensionDevtools.copyPropertyPath",
-					"when": "view == aeCompositionOutline && viewItem == PropertyGroup"
-				}
+                {
+                    "command": "adobeExtensionDevtools.copyPropertyPath",
+                    "when": "view == aeCompositionOutline && viewItem == Property"
+                },
+                {
+                    "command": "adobeExtensionDevtools.copyPropertyPath",
+                    "when": "view == aeCompositionOutline && viewItem == PropertyGroup"
+                }
             ]
         },
         "commands": [
@@ -64,7 +64,32 @@
                 "command": "adobeExtensionDevtools.copyPropertyPath",
                 "title": "Copy Property Path"
             }
-        ]
+        ],
+        "configuration": {
+            "title": "Adobe Extension Development Tools",
+            "properties": {
+                "adobeExtensionDevtools.aeCompositionOutline.displayedLayerProperties": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": [
+                        "ADBE Transform Group",
+                        "ADBE Audio Group",
+                        "ADBE Effect Parade",
+                        "ADBE Layer Styles",
+                        "ADBE Mask Parade"
+                    ]
+                },
+                "adobeExtensionDevtools.aeCompositionOutline.excludePropertyPaths": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": []
+                }
+            }
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
@@ -92,6 +117,7 @@
     },
     "dependencies": {
         "escape-string-applescript": "^2.0.0",
-        "execa": "^5.1.1"
+        "execa": "^5.1.1",
+        "javascript-stringify": "^2.1.0"
     }
 }
