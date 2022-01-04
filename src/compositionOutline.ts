@@ -139,6 +139,7 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
                 argumentObject: {
                     displayedLayerProperties: configuration.displayedLayerProperties,
                     excludePropertyPaths: configuration.excludePropertyPaths,
+                    showEmptyPropertyGroup: configuration.showEmptyPropertyGroup
                 },
             });
             if (this.composition === null) return [];

@@ -78,7 +78,8 @@
                         "ADBE Audio Group",
                         "ADBE Effect Parade",
                         "ADBE Layer Styles",
-                        "ADBE Mask Parade"
+                        "ADBE Mask Parade",
+                        "ADBE Text Properties"
                     ]
                 },
                 "adobeExtensionDevtools.aeCompositionOutline.excludePropertyPaths": {
@@ -87,6 +88,10 @@
                         "type": "string"
                     },
                     "default": []
+                },
+                "adobeExtensionDevtools.aeCompositionOutline.showEmptyPropertyGroup": {
+                    "type": "boolean",
+                    "default": false
                 }
             }
         }

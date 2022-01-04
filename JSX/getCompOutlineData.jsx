@@ -8,8 +8,10 @@
             'ADBE Effect Parade',
             'ADBE Layer Styles',
             'ADBE Mask Parade',
+            'ADBE Text Properties',
         ],
         excludePropertyPaths: [],
+        showEmptyPropertyGroup: false,
     };
 
     if (typeof __adobeExtensionDevtools__ !== 'undefined') {
@@ -42,6 +44,8 @@
      * @returns {boolean}
      */
     function showProperty(property, propertyPath) {
+        if (!configuration.showEmptyPropertyGroup && property.numProperties === 0) return false;
+
         var shouldDisplay = property.enabled;
         var i;
 
@@ -71,6 +75,10 @@
         return true;
     }
 
+    function hasOwnProperty(obj, key) {
+        return Object.prototype.hasOwnProperty.call(obj, key);
+    }
+
     /**
      * @param {Property} property
      * @param {number} [keyIndex]
@@ -83,7 +91,19 @@
 
         var value = keyIndex === undefined ? property.value : property.keyValue(keyIndex);
         if (propertyValueType === PropertyValueType.TEXT_DOCUMENT) {
-            return {};
+            /** @type {TextDocument} */
+            var textDocument = value;
+            var obj = {};
+            for (var key in textDocument) {
+                if (hasOwnProperty(textDocument, key)) {
+                    if (!textDocument.boxText && (key === 'boxTextPos' || key === 'boxTextSize')) {
+                        break;
+                    } else {
+                        obj[key] = textDocument[key];
+                    }
+                }
+            }
+            return obj;
         }
 
         return value;

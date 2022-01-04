@@ -3,6 +3,7 @@ import vscode from 'vscode';
 class Configuration {
     displayedLayerProperties: string[] = [];
     excludePropertyPaths: string[] = [];
+    showEmptyPropertyGroup = false;
 
     constructor() {
         this.update();
@@ -14,6 +15,8 @@ class Configuration {
             latestConfiguration.get('aeCompositionOutline.displayedLayerProperties') ?? [];
         this.excludePropertyPaths =
             latestConfiguration.get('aeCompositionOutline.excludePropertyPaths') ?? [];
+        this.showEmptyPropertyGroup =
+            latestConfiguration.get('aeCompositionOutline.showEmptyPropertyGroup') ?? false;
     }
 }
 
