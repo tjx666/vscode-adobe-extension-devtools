@@ -1,0 +1,11 @@
+{
+    "$.writeln()": {
+        "scope": "javascript",
+        "prefix": "wl",
+        "body": [
+            "$.writeln($1);",
+            "$0"
+        ],
+        "description": "ExtendScript output to stdout"
+    }
+}

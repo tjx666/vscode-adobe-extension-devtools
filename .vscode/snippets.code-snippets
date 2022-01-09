@@ -16,11 +16,5 @@
 			"'use strict';"
 		],
         "description": "use strict mode"
-    },
-    "$.writeln()": {
-        "scope": "javascript",
-        "prefix": "wl",
-        "body": "$.writeln($1);",
-        "description": "ExtendScript output to stdio"
-    },
+    }
 }

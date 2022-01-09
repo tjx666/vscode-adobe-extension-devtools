@@ -95,7 +95,13 @@
                     "default": false
                 }
             }
-        }
+        },
+        "snippets": [
+            {
+                "language": "javascript",
+                "path": "./snippets/javascript.code-snippets"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run compile",
