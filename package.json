@@ -23,7 +23,8 @@
         "AfterEffects"
     ],
     "activationEvents": [
-        "onLanguage:javascript"
+        "onLanguage:javascript",
+        "onCommand:adobeExtensionDevtools.refreshAeCompositionOutline"
     ],
     "main": "./out/src/extension.js",
     "contributes": {

@@ -19,6 +19,7 @@ export interface CompositionNode extends ViewNode {
 
 export interface LayerNode extends ViewNode {
     type: 'Layer';
+    layerType: string;
     path: number[];
     name: string;
     index: number;

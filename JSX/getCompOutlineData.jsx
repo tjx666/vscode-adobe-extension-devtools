@@ -19,6 +19,107 @@
         configuration.excludePropertyPaths = args.excludePropertyPaths;
     }
 
+    var LayerTypes = {
+        Solid: 'Solid',
+        Shape: 'Shape',
+        Still: 'Still',
+        Text: 'Text',
+        Audio: 'Audio',
+        Video: 'Video',
+        ImageSequence: 'ImageSequence',
+        NullObject: 'NullObject',
+        PlaceholderStill: 'PlaceholderStill',
+        PlaceholderVideo: 'PlaceholderVideo',
+        PreCompose: 'PreCompose',
+        Guide: 'Guide',
+        Adjustment: 'Adjustment',
+        Camera: 'Camera',
+        Light: 'Light',
+        Data: 'Data',
+    };
+
+    /**
+     * @param {Layer} layer
+     * @returns {keyof LayerType}
+     */
+    function resolveAVLayerType(layer) {
+        var source = layer.source;
+        if (source instanceof CompItem) {
+            return LayerTypes.PreCompose;
+        }
+
+        var mainSource = source.mainSource;
+        if (!layer.hasVideo) {
+            if (layer.hasAudio) {
+                return LayerTypes.Audio;
+            } else {
+                return LayerTypes.Data;
+            }
+        } else if (source.frameDuration < 1) {
+            if (mainSource instanceof PlaceholderSource) {
+                return LayerTypes.PlaceholderVideo;
+            } else if (mainSource.isStill) {
+                return LayerTypes.Still;
+            }
+            // ImageSequence Layer source name is xxx-[00000-000xx].xxx or xxx-{00000-000xx}.xxx
+            else if (
+                /[[{]\d+-\d+[}\]].\w+$/.test(source.name) ||
+                /_\d{5}.\w+?$/.test(source.file.name)
+            ) {
+                return LayerTypes.ImageSequence;
+            } else {
+                return LayerTypes.Video;
+            }
+        } else if (source.frameDuration === 1) {
+            if (mainSource instanceof PlaceholderSource) {
+                return LayerTypes.PlaceholderStill;
+            } else if (mainSource.color) {
+                return LayerTypes.Solid;
+            } else {
+                return LayerTypes.Still;
+            }
+        }
+    }
+
+    /**
+     * @param {Layer} layer
+     * @returns {keyof LayerType}
+     */
+    function resolveLayerType(layer) {
+        'use strict';
+
+        var LayerConstructors = [AVLayer, CameraLayer, LightLayer, ShapeLayer, TextLayer];
+        var result;
+
+        if (layer.adjustmentLayer) {
+            return LayerTypes.Adjustment;
+        }
+
+        if (layer.nullLayer) {
+            return LayerTypes.NullObject;
+        }
+
+        var i;
+        for (i = 0; i < LayerConstructors.length; i++) {
+            if (layer instanceof LayerConstructors[i]) {
+                result = LayerConstructors[i].name;
+                break;
+            }
+        }
+        if (result === 'AVLayer') {
+            result = resolveAVLayerType(layer);
+        } else if (result === 'CameraLayer') {
+            result = LayerTypes.Camera;
+        } else if (result === 'LightLayer') {
+            result = LayerTypes.Light;
+        } else if (result === 'ShapeLayer') {
+            result = LayerTypes.Shape;
+        } else if (result === 'TextLayer') {
+            result = LayerTypes.Text;
+        }
+        return result;
+    }
+
     function isLayer(object) {
         return 'nullLayer' in object;
     }
@@ -75,8 +176,20 @@
         return true;
     }
 
-    function hasOwnProperty(obj, key) {
-        return Object.prototype.hasOwnProperty.call(obj, key);
+    function getObjectKeys(object) {
+        var isObject = object !== null && typeof object === 'object';
+        if (!isObject) {
+            throw new TypeError(object + ' is not object!');
+        }
+
+        var ownKeys = [];
+        for (var key in object) {
+            if (Object.prototype.hasOwnProperty.call(object, key)) {
+                ownKeys.push(key);
+            }
+        }
+
+        return ownKeys;
     }
 
     /**
@@ -94,13 +207,17 @@
             /** @type {TextDocument} */
             var textDocument = value;
             var obj = {};
-            for (var key in textDocument) {
-                if (hasOwnProperty(textDocument, key)) {
-                    if (!textDocument.boxText && (key === 'boxTextPos' || key === 'boxTextSize')) {
-                        break;
-                    } else {
-                        obj[key] = textDocument[key];
-                    }
+            var textDocumentKeys = getObjectKeys(textDocument);
+            for (var i = 0, key; i < textDocumentKeys.length; i++) {
+                key = textDocumentKeys[i];
+                if (!textDocument.boxText && (key === 'boxTextPos' || key === 'boxTextSize')) {
+                    continue;
+                } else if (key === 'strokeColor' && !textDocument.applyStroke) {
+                    continue;
+                } else if (key === 'fillColor' && !textDocument.applyFill) {
+                    continue;
+                } else {
+                    obj[key] = textDocument[key];
                 }
             }
             return obj;
@@ -227,6 +344,7 @@
             layerPath = [layer.index];
             layerData = {
                 type: 'Layer',
+                layerType: resolveLayerType(layer),
                 path: layerPath,
                 name: layer.name,
                 index: layer.index,

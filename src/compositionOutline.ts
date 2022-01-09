@@ -22,8 +22,10 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
     readonly onDidChangeTreeData: vscode.Event<ViewNode | void> = this._onDidChangeTreeData.event;
 
     private composition: CompositionNode | undefined | null;
+    private activatedByRefresh = false;
 
     refresh() {
+        this.activatedByRefresh = true;
         this._onDidChangeTreeData.fire();
     }
 
@@ -43,7 +45,7 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         if (node.type === 'Layer') {
             const layer = node as LayerNode;
             return {
-                label: layer.name,
+                label: `[${layer.index}] [${layer.layerType}] ${layer.name}`,
                 tooltip: new MarkdownString('`Layer:` ' + layer.name),
                 collapsibleState: TreeItemCollapsibleState.Collapsed,
                 contextValue: 'Layer',
@@ -133,13 +135,15 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         if (SYSTEM === 'Window') return [];
 
         if (!node) {
+            if (!this.activatedByRefresh) return [];
+
             configuration.update();
             const scriptPath = resolve(JSX_DIR, 'getCompOutlineData.jsx');
             this.composition = await evalFile(scriptPath, {
                 argumentObject: {
                     displayedLayerProperties: configuration.displayedLayerProperties,
                     excludePropertyPaths: configuration.excludePropertyPaths,
-                    showEmptyPropertyGroup: configuration.showEmptyPropertyGroup
+                    showEmptyPropertyGroup: configuration.showEmptyPropertyGroup,
                 },
             });
             if (this.composition === null) return [];
