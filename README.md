@@ -2,11 +2,18 @@
 
 ## Features
 
-- support ExtendScript `// @include './modulePath.jsx'` jump to definition file
-- AE Composition Tree View, for MacOS Only Now
+### JSX module definition jump
+
+![JSX module definition jump](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/jump_to_definition.gif?raw=true)
+
+### AE Composition Tree View
+
+For MacOS Only Now, you need to manually refresh the outline to get latest info about activate composition.
+
+![AE Composition Tree View](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/ae_composition_outline.gif?raw=true)
 
 ## TODOs
 
 - [x] JSX module definition jump
-- [ ] AE Composition Tree View
+- [x] AE Composition Tree View
 - [ ] Snippets

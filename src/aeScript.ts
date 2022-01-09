@@ -1,11 +1,13 @@
 import fs from 'fs/promises';
 import pathUtils from 'path';
+
 import escape from 'escape-string-applescript';
 import execa from 'execa';
-
-import { DATA_DIR, EXTENSION_DIR } from './constants';
-import { uuidV4 } from './utils';
 import { stringify } from 'javascript-stringify';
+
+import configuration from './configuration';
+import { EXTENSION_DIR } from './constants';
+import { uuidV4 } from './utils';
 
 async function findAe() {
     const appsDir = '/Applications';
@@ -45,7 +47,7 @@ async function evalFile(scriptPath: string, options?: EvalFileOptions) {
     const ae = await findAe();
     const uuid = uuidV4();
 
-    const jsxOutputFolder = pathUtils.resolve(DATA_DIR, 'jsx/output');
+    const jsxOutputFolder = pathUtils.resolve(configuration.globalStoragePath, 'jsx/output');
     await fs.mkdir(jsxOutputFolder, { recursive: true });
     const jsxOutputFilePath = pathUtils.resolve(
         jsxOutputFolder,
@@ -71,7 +73,7 @@ async function evalFile(scriptPath: string, options?: EvalFileOptions) {
         script = script.replaceAll(`__${key}__`, value);
     }
 
-    const appleScriptsFolder = pathUtils.resolve(DATA_DIR, 'apple_scripts');
+    const appleScriptsFolder = pathUtils.resolve(configuration.globalStoragePath, 'apple_scripts');
     await fs.mkdir(appleScriptsFolder, { recursive: true });
     const appleScriptPath = pathUtils.resolve(appleScriptsFolder, `ae-command-${uuid}.scpt`);
     const appleScript = `tell application "${ae}"
@@ -83,17 +85,16 @@ async function evalFile(scriptPath: string, options?: EvalFileOptions) {
     ]);
 
     let result: any;
+    await execa('osascript', [appleScriptPath]);
+    const output = await fs.readFile(jsxOutputFilePath, 'utf-8');
     try {
-        await execa('osascript', [appleScriptPath]);
-        const output = await fs.readFile(jsxOutputFilePath, 'utf-8');
-        try {
-            result = JSON.parse(output);
-        } catch {
-            result = output;
-        }
-    } finally {
-        await Promise.all([fs.rm(appleScriptPath), fs.rm(jsxOutputFilePath)]);
+        result = JSON.parse(output);
+    } catch {
+        return output;
     }
+    
+    // if execute failed, keep the scripts
+    await Promise.all([fs.rm(appleScriptPath), fs.rm(jsxOutputFilePath)]);
 
     return result;
 }

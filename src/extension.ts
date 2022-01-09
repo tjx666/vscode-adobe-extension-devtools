@@ -2,10 +2,13 @@ import vscode from 'vscode';
 import { ViewNode } from './aeModels';
 
 import CompositionOutlineProvider from './compositionOutline';
+import configuration from './configuration';
 import JsxModuleDefinitionProvider from './jsxModuleDefinitionProvider';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);
+
+    configuration.update(context);
 
     const jsxModuleDefinitionProvider = vscode.languages.registerDefinitionProvider(
         ['javascript'],

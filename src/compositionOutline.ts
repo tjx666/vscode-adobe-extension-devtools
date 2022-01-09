@@ -22,10 +22,10 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
     readonly onDidChangeTreeData: vscode.Event<ViewNode | void> = this._onDidChangeTreeData.event;
 
     private composition: CompositionNode | undefined | null;
-    private activatedByRefresh = false;
+    private fireByRefresh = false;
 
     refresh() {
-        this.activatedByRefresh = true;
+        this.fireByRefresh = true;
         this._onDidChangeTreeData.fire();
     }
 
@@ -135,7 +135,7 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         if (SYSTEM === 'Window') return [];
 
         if (!node) {
-            if (!this.activatedByRefresh) return [];
+            if (!this.fireByRefresh) return [];
 
             configuration.update();
             const scriptPath = resolve(JSX_DIR, 'getCompOutlineData.jsx');

@@ -1,15 +1,20 @@
-import vscode from 'vscode';
+import vscode, { ExtensionContext } from 'vscode';
 
 class Configuration {
     displayedLayerProperties: string[] = [];
     excludePropertyPaths: string[] = [];
     showEmptyPropertyGroup = false;
+    globalStoragePath = '';
 
     constructor() {
         this.update();
     }
 
-    update() {
+    update(extensionContext?: ExtensionContext) {
+        if (extensionContext) {
+            this.globalStoragePath = extensionContext.globalStorageUri.fsPath;
+        }
+
         const latestConfiguration = vscode.workspace.getConfiguration('adobeExtensionDevtools');
         this.displayedLayerProperties =
             latestConfiguration.get('aeCompositionOutline.displayedLayerProperties') ?? [];
