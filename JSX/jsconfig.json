@@ -7,7 +7,7 @@
     "include": [
         "./**/*.jsx",
         "./**/*.d.ts",
-        "../node_modules/types-for-adobe/AfterEffects/2018/**/*.d.ts",
+        "../node_modules/types-for-adobe/AfterEffects/18.0/index.d.ts",
         "../node_modules/types-for-adobe/shared/**/*.d.ts"
     ]
 }

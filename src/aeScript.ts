@@ -1,13 +1,12 @@
 import fs from 'fs/promises';
 import pathUtils from 'path';
 
-import escape from 'escape-string-applescript';
 import execa from 'execa';
 import { stringify } from 'javascript-stringify';
 
 import configuration from './configuration';
 import { EXTENSION_DIR } from './constants';
-import { uuidV4 } from './utils';
+import { uuidV4, escapeStringAppleScript } from './utils';
 
 async function findAe() {
     const appsDir = '/Applications';
@@ -77,7 +76,7 @@ async function evalFile(scriptPath: string, options?: EvalFileOptions) {
     await fs.mkdir(appleScriptsFolder, { recursive: true });
     const appleScriptPath = pathUtils.resolve(appleScriptsFolder, `ae-command-${uuid}.scpt`);
     const appleScript = `tell application "${ae}"
-    DoScript "${escape(script)}"
+    DoScript "${escapeStringAppleScript(script)}"
     end tell`;
     await Promise.all([
         await fs.writeFile(jsxOutputFilePath, '', 'utf-8'),
@@ -92,7 +91,7 @@ async function evalFile(scriptPath: string, options?: EvalFileOptions) {
     } catch {
         return output;
     }
-    
+
     // if execute failed, keep the scripts
     await Promise.all([fs.rm(appleScriptPath), fs.rm(jsxOutputFilePath)]);
 

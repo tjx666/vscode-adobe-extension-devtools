@@ -36,4 +36,8 @@ function toFixed(num: number, fractionDigits = 3) {
     return Math.round(num * multiplex) / multiplex;
 }
 
-export { uuidV4, pathExists, toFixed };
+export default function escapeStringAppleScript(string: string) {
+    return string.replace(/[\\"]/g, '\\$&');
+}
+
+export { uuidV4, pathExists, toFixed, escapeStringAppleScript };

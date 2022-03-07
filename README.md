@@ -17,3 +17,4 @@ For MacOS Only Now, you need to manually refresh the outline to get latest info 
 - [x] JSX module definition jump
 - [x] AE Composition Tree View
 - [ ] Snippets
+- [ ] PS Script Listener Log auto parse and size limit
