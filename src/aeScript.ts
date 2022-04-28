@@ -36,7 +36,14 @@ interface EvalFileOptions {
     placeholders?: Record<string, any>;
 }
 
+let isPolyfill = false;
 async function evalFile(scriptPath: string, options?: EvalFileOptions) {
+    if (!isPolyfill) {
+        isPolyfill = true;
+        const jsonPolyfillScript = pathUtils.resolve(EXTENSION_DIR, 'JSX/json2.jsx');
+        await evalFile(jsonPolyfillScript);
+    }
+
     const defaultOptions: EvalFileOptions = {
         argumentObject: {},
         placeholders: {},
