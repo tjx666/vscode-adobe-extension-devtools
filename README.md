@@ -19,5 +19,9 @@ For MacOS Only Now, you need to manually refresh the outline to get latest info 
 - [ ] Snippets
 - [ ] char id to string id
 - [ ] string id to char id
-- [ ] PS Layer Tree View
+- [ ] PS Document Tree View
 - [ ] Paste last operation AM script
+
+## Related
+
+- [VSCode Scripting Listener](https://github.com/tjx666/scripting-listener)

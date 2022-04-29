@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.4] - 2022-04-30
+
+### Added
+
+- support copy property value
+
 ## [0.0.3] - 2022-04-28
 
 ### Fixed
