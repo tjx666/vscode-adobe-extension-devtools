@@ -1,5 +1,6 @@
 import { resolve } from 'path';
 import vscode, { MarkdownString, TreeItemCollapsibleState } from 'vscode';
+import { stringify } from 'javascript-stringify';
 
 import {
     CompositionNode,
@@ -29,16 +30,20 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
         this._onDidChangeTreeData.fire();
     }
 
-    copyPropertyPath(node: ViewNode) {
-        if (node.type === 'PropertyGroup' || node.type === 'Property') {
-            const propertyPath = (node as PropertyNode).path.slice(1).map((v) => {
-                if (typeof v === 'string') {
-                    return `'${v}'`;
-                }
-                return v;
-            });
-            vscode.env.clipboard.writeText(`[${propertyPath.join(', ')}]`);
-        }
+    copyPropertyPath(node: PropertyNode | PropertyGroupNode) {
+        const propertyPath = (node as PropertyNode).path.slice(1).map((v) => {
+            if (typeof v === 'string') {
+                return `'${v}'`;
+            }
+            return v;
+        });
+        vscode.env.clipboard.writeText(`[${propertyPath.join(', ')}]`);
+    }
+
+    copyPropertyValue(node: JsonValueNode) {
+        vscode.env.clipboard.writeText(
+            stringify(node.value, null, 4) ?? 'read property value failed!',
+        );
     }
 
     getTreeItem(node: ViewNode): vscode.TreeItem {

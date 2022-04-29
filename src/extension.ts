@@ -1,5 +1,5 @@
 import vscode from 'vscode';
-import { ViewNode } from './aeModels';
+import { JsonValueNode, PropertyGroupNode, PropertyNode } from './aeModels';
 
 import CompositionOutlineProvider from './compositionOutline';
 import configuration from './configuration';
@@ -24,8 +24,14 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('adobeExtensionDevtools.refreshAeCompositionOutline', () =>
         compositionOutlineProvider.refresh(),
     );
-    vscode.commands.registerCommand('adobeExtensionDevtools.copyPropertyPath', (node: ViewNode) =>
-        compositionOutlineProvider.copyPropertyPath(node),
+    vscode.commands.registerCommand(
+        'adobeExtensionDevtools.copyPropertyPath',
+        (node: PropertyNode | PropertyGroupNode) =>
+            compositionOutlineProvider.copyPropertyPath(node),
+    );
+    vscode.commands.registerCommand(
+        'adobeExtensionDevtools.copyPropertyValue',
+        (node: JsonValueNode) => compositionOutlineProvider.copyPropertyValue(node),
     );
 }
 
