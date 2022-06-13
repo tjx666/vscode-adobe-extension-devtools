@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.5] - 2022-06-14
+
+### Added
+
+- new settings: `adobeExtensionDevtools.aeAppPath`
+
 ## [0.0.4] - 2022-04-30
 
 ### Added
