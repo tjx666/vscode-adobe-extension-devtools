@@ -9,6 +9,8 @@ import { EXTENSION_DIR } from './constants';
 import { uuidV4, escapeStringAppleScript } from './utils';
 
 async function findAe() {
+    if (configuration.aeAppPath) return configuration.aeAppPath;
+
     const appsDir = '/Applications';
     const appFolderNames = await fs.readdir(appsDir);
 

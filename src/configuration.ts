@@ -4,6 +4,7 @@ class Configuration {
     displayedLayerProperties: string[] = [];
     excludePropertyPaths: string[] = [];
     showEmptyPropertyGroup = false;
+    aeAppPath: string | undefined;
     globalStoragePath = '';
 
     constructor() {
@@ -22,6 +23,7 @@ class Configuration {
             latestConfiguration.get('aeCompositionOutline.excludePropertyPaths') ?? [];
         this.showEmptyPropertyGroup =
             latestConfiguration.get('aeCompositionOutline.showEmptyPropertyGroup') ?? false;
+        this.aeAppPath = latestConfiguration.get('aeAppPath');
     }
 }
 
