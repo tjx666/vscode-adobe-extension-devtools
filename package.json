@@ -88,7 +88,7 @@
             "properties": {
                 "adobeExtensionDevtools.aeAppPath": {
                     "type": "string",
-                    "title": "The path to Adobe After Effects xxxx.app"
+                    "title": "The path to Adobe After Effects 20xx.app"
                 },
                 "adobeExtensionDevtools.aeCompositionOutline.displayedLayerProperties": {
                     "type": "array",
@@ -114,6 +114,10 @@
                 "adobeExtensionDevtools.aeCompositionOutline.showEmptyPropertyGroup": {
                     "type": "boolean",
                     "default": false
+                },
+                "adobeExtensionDevtools.psAppFolderPath": {
+                    "type": "string",
+                    "title": "The path to Adobe Photoshop 20xx folder, not 20xx.app"
                 }
             }
         },
@@ -135,18 +139,18 @@
     "devDependencies": {
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.1.1",
-        "@types/node": "17.0.42",
+        "@types/node": "18.0.0",
         "@types/vscode": "^1.68.0",
         "@typescript-eslint/eslint-plugin": "^5.28.0",
         "@typescript-eslint/parser": "^5.28.0",
         "@vscode/test-electron": "^2.1.4",
         "after-effects": "^0.4.15",
-        "eslint": "^8.17.0",
+        "eslint": "^8.18.0",
         "eslint-config-prettier": "^8.5.0",
         "glob": "^8.0.3",
         "mocha": "^10.0.0",
-        "types-for-adobe": "^7.0.4",
-        "typescript": "^4.7.3"
+        "types-for-adobe": "^7.0.5",
+        "typescript": "^4.7.4"
     },
     "dependencies": {
         "execa": "^5.1.1",
