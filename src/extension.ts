@@ -1,7 +1,7 @@
 import vscode from 'vscode';
-import { JsonValueNode, PropertyGroupNode, PropertyNode } from './aeModels';
+import { JsonValueNode, PropertyGroupNode, PropertyNode } from './afterEffects/aeModels';
 
-import CompositionOutlineProvider from './compositionOutline';
+import CompositionOutlineProvider from './afterEffects/compositionOutline';
 import configuration from './configuration';
 import JsxModuleDefinitionProvider from './jsxModuleDefinitionProvider';
 

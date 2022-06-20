@@ -1,7 +1,7 @@
 import pathUtils from 'path';
 import { Position, Uri, Range } from 'vscode';
 import type { CancellationToken, DefinitionProvider, TextDocument, DefinitionLink } from 'vscode';
-import { pathExists } from './utils';
+import { pathExists } from './utils/common';
 
 class JsxModuleDefinitionProvider implements DefinitionProvider {
     async provideDefinition(

@@ -12,10 +12,10 @@ import {
     PropertyNode,
     ViewNode,
 } from './aeModels';
-import evalFile from './aeScript';
-import configuration from './configuration';
-import { JSX_DIR, SYSTEM } from './constants';
-import { toFixed } from './utils';
+import configuration from '../configuration';
+import { JSX_DIR, SYSTEM } from '../constants';
+import { toFixed } from '../utils/common';
+import evalFile from '../utils/evalJsx';
 
 export default class CompositionOutlineProvider implements vscode.TreeDataProvider<ViewNode> {
     private _onDidChangeTreeData: vscode.EventEmitter<ViewNode | void> =
@@ -143,8 +143,8 @@ export default class CompositionOutlineProvider implements vscode.TreeDataProvid
             if (!this.fireByRefresh) return [];
 
             configuration.update();
-            const scriptPath = resolve(JSX_DIR, 'getCompOutlineData.jsx');
-            this.composition = await evalFile(scriptPath, {
+            const scriptPath = resolve(JSX_DIR, 'afterEFfects/service/getCompOutlineData.jsx');
+            this.composition = await evalFile('AE', scriptPath, {
                 argumentObject: {
                     displayedLayerProperties: configuration.displayedLayerProperties,
                     excludePropertyPaths: configuration.excludePropertyPaths,

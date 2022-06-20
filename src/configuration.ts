@@ -5,6 +5,7 @@ class Configuration {
     excludePropertyPaths: string[] = [];
     showEmptyPropertyGroup = false;
     aeAppPath: string | undefined;
+    psAppFolderPath: string | undefined;
     globalStoragePath = '';
 
     constructor() {
@@ -24,6 +25,7 @@ class Configuration {
         this.showEmptyPropertyGroup =
             latestConfiguration.get('aeCompositionOutline.showEmptyPropertyGroup') ?? false;
         this.aeAppPath = latestConfiguration.get('aeAppPath');
+        this.psAppFolderPath = latestConfiguration.get('psAppFolderPath');
     }
 }
 
