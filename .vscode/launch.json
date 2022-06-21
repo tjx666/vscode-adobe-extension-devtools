@@ -44,10 +44,20 @@
             "preLaunchTask": "${defaultBuildTask}"
         },
         {
+            "name": "PS JSX",
+            "type": "extendscript-debug",
+            "request": "launch",
+            "hostAppSpecifier": "photoshop",
+            "script": "${file}",
+            "hiddenTypes": ["Function", "builtin"]
+        },
+        {
             "name": "AE JSX",
             "type": "extendscript-debug",
             "request": "launch",
-            "program": "${file}"
+            "hostAppSpecifier": "aftereffects",
+            "script": "${file}",
+            "hiddenTypes": ["Function", "builtin"]
         },
     ]
 }

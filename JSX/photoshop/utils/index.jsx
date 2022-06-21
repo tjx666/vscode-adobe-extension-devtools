@@ -33,9 +33,12 @@
     try {
         // polyfill
         // @include '../../polyfill/json2.jsx'
+        // @include '../../polyfill/Array.jsx'
 
         // utils
         // @include '../../utils/exception.jsx'
+        // @include './descriptorInfo.jsx'
+        // @include './layer.jsx'
     } catch(error) {
         alert('load modules error!\n' + $.global.vscDevtools.exception.getErrorDetails(error));
         recycle();

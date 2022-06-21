@@ -29,6 +29,7 @@
     try {
         // polyfill
         // @include '../../polyfill/json2.jsx'
+        // @include '../../polyfill/Array.jsx'
 
         // utils
         // @include '../../utils/exception.jsx'

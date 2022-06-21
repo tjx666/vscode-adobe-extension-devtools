@@ -25,7 +25,8 @@
     ],
     "activationEvents": [
         "onLanguage:javascript",
-        "onCommand:adobeExtensionDevtools.refreshAeCompositionOutline"
+        "onCommand:adobeExtensionDevtools.refreshAeCompositionOutline",
+        "onCommand:adobeExtensionDevtools.ps.viewLayerInfo"
     ],
     "main": "./out/src/extension.js",
     "contributes": {
@@ -81,6 +82,14 @@
             {
                 "command": "adobeExtensionDevtools.copyPropertyValue",
                 "title": "Copy Value"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewLayerInfo",
+                "title": "View Current Selected Layer Descriptor Info"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewLayerInfoDiff",
+                "title": "View Current Selected Layer Descriptor Info in Diff Mode"
             }
         ],
         "configuration": {

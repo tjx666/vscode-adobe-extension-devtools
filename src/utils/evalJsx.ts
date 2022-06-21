@@ -10,7 +10,7 @@ import configuration from '../configuration';
 
 type HostApp = 'AE' | 'PS';
 
-async function loadPreloadScript(host: HostApp) {
+async function loadPreloadScript(host: HostApp, preloadScriptPath: string) {
     // eslint-disable-next-line @typescript-eslint/no-use-before-define
     return evalScript(
         host,
@@ -19,10 +19,7 @@ async function loadPreloadScript(host: HostApp) {
     })();`,
         {
             placeholders: {
-                preload: resolve(
-                    JSX_DIR,
-                    (host === 'AE' ? 'afterEffects' : 'photoshop') + '/utils/index.jsx',
-                ),
+                preload: preloadScriptPath,
             },
         },
     );
@@ -31,34 +28,15 @@ async function loadPreloadScript(host: HostApp) {
 interface EvalScriptAdapter {
     findApp(): Promise<string | undefined>;
     createOsascript(app: string, script: string): string;
-}
-
-class EvalPsScriptAdapter implements EvalScriptAdapter {
-    /**
-     * find host app path, only support MacOS
-     * @param appName like: Adobe Photoshop
-     * @returns Adobe Photoshop 2021.app
-     */
-    async findApp() {
-        if (configuration.psAppFolderPath) return configuration.psAppFolderPath;
-        const appsDir = '/Applications';
-        const appFolderNames = await fs.readdir(appsDir);
-
-        const appFolderName = appFolderNames.find((folderName) =>
-            folderName.includes('Adobe Photoshop'),
-        );
-        return appFolderName;
-    }
-
-    createOsascript(app: string, script: string): string {
-        return `tell application "${app}"
-        activate
-        do javascript "${script}"
-    end tell`;
-    }
+    /** eval only once whole extension lifecycle */
+    preloadScript?: string;
+    /** eval every time */
+    preEvalScript?: string;
 }
 
 class EvalAeScriptAdapter implements EvalScriptAdapter {
+    preloadScript = resolve(JSX_DIR, 'afterEffects/utils/index.jsx');
+
     async findApp() {
         if (configuration.aeAppPath) return configuration.aeAppPath;
 
@@ -85,7 +63,33 @@ end tell`;
     }
 }
 
-const adapterMap: Map<HostApp, EvalScriptAdapter> = new Map([
+class EvalPsScriptAdapter implements EvalScriptAdapter {
+    preEvalScript = resolve(JSX_DIR, 'photoshop/utils/index.jsx');
+
+    /**
+     * find host app path, only support MacOS
+     * @param appName like: Adobe Photoshop
+     * @returns Adobe Photoshop 2021.app
+     */
+    async findApp() {
+        if (configuration.psAppFolderPath) return configuration.psAppFolderPath;
+        const appsDir = '/Applications';
+        const appFolderNames = await fs.readdir(appsDir);
+
+        const appFolderName = appFolderNames.find((folderName) =>
+            folderName.includes('Adobe Photoshop'),
+        );
+        return appFolderName;
+    }
+
+    createOsascript(app: string, script: string): string {
+        return `tell application "${app}"
+        do javascript "${script}"
+    end tell`;
+    }
+}
+
+const adapterMap = new Map<HostApp, EvalScriptAdapter>([
     ['AE', new EvalAeScriptAdapter()],
     ['PS', new EvalPsScriptAdapter()],
 ]);
@@ -98,9 +102,10 @@ interface EvalOptions {
 const preloadScriptLoadedMap: Map<HostApp, boolean> = new Map();
 
 export async function evalScript(host: HostApp, script: string, options?: EvalOptions) {
-    if (preloadScriptLoadedMap.get(host) !== true) {
+    const evalScriptAdapter = adapterMap.get(host)!;
+    if (evalScriptAdapter.preloadScript && preloadScriptLoadedMap.get(host) !== true) {
         preloadScriptLoadedMap.set(host, true);
-        await loadPreloadScript(host);
+        await loadPreloadScript(host, evalScriptAdapter.preloadScript);
     }
 
     const defaultOptions: EvalOptions = {
@@ -108,13 +113,16 @@ export async function evalScript(host: HostApp, script: string, options?: EvalOp
         placeholders: {},
     };
     options = Object.assign(defaultOptions, options);
-    const evalScriptAdapter = adapterMap.get(host)!;
 
     // a script to inject some helper functions
     // for example: print function, which print string as result
     const injectApiScriptPath = pathUtils.resolve(EXTENSION_DIR, 'JSX/inject.jsx');
     const injectApiScript = await fs.readFile(injectApiScriptPath, 'utf8');
     script = injectApiScript.replace('// ${executeScriptCode}', script);
+
+    if (evalScriptAdapter.preEvalScript) {
+        script = `\n// @include '${evalScriptAdapter.preEvalScript}'\n` + script;
+    }
 
     const app = await evalScriptAdapter.findApp();
     if (!app) {

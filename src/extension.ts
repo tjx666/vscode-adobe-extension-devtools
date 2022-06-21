@@ -1,14 +1,18 @@
-import vscode from 'vscode';
+import vscode, { workspace } from 'vscode';
 import { JsonValueNode, PropertyGroupNode, PropertyNode } from './afterEffects/aeModels';
 
 import CompositionOutlineProvider from './afterEffects/compositionOutline';
 import configuration from './configuration';
 import JsxModuleDefinitionProvider from './jsxModuleDefinitionProvider';
+import { layerInfoEditor } from './photoshop/layerInfoEditor'
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);
 
     configuration.update(context);
+    workspace.onDidChangeConfiguration(() => {
+        configuration.update(context);
+    }, context.subscriptions)
 
     const jsxModuleDefinitionProvider = vscode.languages.registerDefinitionProvider(
         ['javascript'],
@@ -32,6 +36,10 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand(
         'adobeExtensionDevtools.copyPropertyValue',
         (node: JsonValueNode) => compositionOutlineProvider.copyPropertyValue(node),
+    );
+
+    vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewLayerInfo', () =>
+        layerInfoEditor.open(),
     );
 }
 

@@ -10,7 +10,33 @@
  *
  */
 
-vscDevtools.descriptorInfo = (function () {
+ vscDevtools.descriptorInfo = (function () {
+    /**
+     * 'a.b[2].c' => ['a', 'b', 2, 'c'];
+     * @param {string} propPathStr
+     * @returns {string[]}
+     */
+    function parsePropPathStrToArray(propPathStr) {
+        return propPathStr
+            .replaceAll(/^\[([^\r\n]*?)\]/g, '$1')
+            .replaceAll(/\[([^\r\n]*?)\]/g, '.$1')
+            .split('.')
+            .map(function (prop) {
+                var index = parseInt(prop, 10);
+                return isNaN(index) ? prop : index;
+            });
+    }
+
+    
+
+    /**
+     * @param {DescValueType} descType
+     * @returns {boolean}
+     */
+    function isCompoundDescValueType(descType) {
+        return descType === 'DescValueType.OBJECTTYPE' || descType === 'DescValueType.LISTTYPE';
+    }
+
     /**
      * Descriptor Info constructor.
      * @constructor
@@ -30,7 +56,7 @@ vscDevtools.descriptorInfo = (function () {
      * 	@param {Number} maxXMPLimit - limits the max number of characters from an XMPMetadataAsUTF8 property. Default = 10000.
      * 	@param {String} saveToFile - Saves the descriptor to a JSON file. Default = '~/Desktop/descriptor-info.json'.
      */
-    DescriptorInfo.prototype.getProperties = function (theDesc, params) {
+    DescriptorInfo.prototype.getProperties = function (desc, params) {
         params = params || {};
         // Define params
         this.descParams = {
@@ -43,10 +69,10 @@ vscDevtools.descriptorInfo = (function () {
         };
 
         var descObject;
-        if (theDesc === '[ActionList]') {
-            descObject = this._getDescList(theDesc);
+        if (desc === '[ActionList]') {
+            descObject = this._getDescList(desc);
         } else {
-            descObject = this._getDescObject(theDesc, {});
+            descObject = this._getDescObject(desc, {});
         }
 
         if (this.descParams.saveToFile) {
@@ -57,15 +83,95 @@ vscDevtools.descriptorInfo = (function () {
     };
 
     /**
+     * 获取 ActionDescriptor 某个属性路径的值
+     * @param {ActionDescriptor | ActionList} desc
+     * @param {string | Array<string|number>} path
+     * @param {any} defaultValue
+     */
+    DescriptorInfo.prototype.get = function (desc, path, defaultValue) {
+        if (!(Array.isArray(path) || typeof path === 'string')) {
+            throw Error('The path: ' + path + 'is neither array nor string!');
+        }
+
+        if (!(desc instanceof ActionDescriptor || desc instanceof ActionList)) {
+            throw new Error('desc must be ActionDescriptor or ActionList!');
+        }
+
+        var propPath = Array.isArray(path) ? path : parsePropPathStrToArray(path);
+        var value = desc;
+        var key, keyTypeID, index, /** @type {DescValueType} */ itemDescType;
+        while (propPath.length && value != null) {
+            key = propPath.shift();
+            itemDescType = undefined;
+            keyTypeID = undefined;
+            index = undefined;
+
+            if (value instanceof ActionDescriptor) {
+                keyTypeID = s2t(key);
+                if (!value.hasKey(keyTypeID)) {
+                    value = undefined;
+                    break;
+                }
+            } else if (value instanceof ActionList) {
+                if (typeof key !== 'number') {
+                    value = undefined;
+                    break;
+                } else {
+                    keyTypeID = key;
+                }
+            } else {
+                break;
+            }
+
+            itemDescType = value.getType(keyTypeID).toString();
+            value = this._getValue(value, itemDescType, keyTypeID);
+
+            if (value instanceof ActionReference) {
+                value = '<ActionReference>';
+            }
+
+            if (!isCompoundDescValueType(itemDescType)) break;
+        }
+
+        if (isCompoundDescValueType(itemDescType)) {
+            value = this._getDescObject(value, {});
+        }
+
+        if (propPath.length === 0 && value === null) return null;
+
+        return value == null ? defaultValue : value;
+    };
+
+    /**
+     * 获取图层某个属性路径的值
+     * @param {number | Layer} id
+     * @param {string | Array<string|number>} path
+     * @param {any} defaultValue
+     */
+    DescriptorInfo.prototype.getLayerProperty = function (id, path, defaultValue) {
+        if (typeof id !== 'number') {
+            id = id.id;
+        }
+
+        var propPath = Array.isArray(path) ? path : parsePropPathStrToArray(path);
+        if (propPath.length === 0)
+            throw new Error('At least one property, but you pass ' + JSON.stringify(path));
+
+        var property = propPath[0];
+        var layerDesc = vscDevtools.layer.getLayerDesc(id, property);
+        return this.get(layerDesc, propPath, defaultValue);
+    };
+
+    /**
      * @private
      * Handler function to get the items in an ActionDescriptor Object
-     * @param {Object} Action Descritor
-     * @param {Object} Empty object to return (required since it's a recursive function)
+     * @param {ActionDescriptor} desc
+     * @param {object} descObject Empty object to return (required since it's a recursive function)
      */
-    DescriptorInfo.prototype._getDescObject = function (theDesc, descObject) {
-        for (var i = 0; i < theDesc.count; i++) {
-            var typeID = theDesc.getKey(i);
-            var descType = theDesc.getType(typeID).toString();
+    DescriptorInfo.prototype._getDescObject = function (desc, descObject) {
+        for (var i = 0; i < desc.count; i++) {
+            var typeID = desc.getKey(i);
+            var descType = desc.getType(typeID).toString();
 
             var descProperties,
                 descStringID = typeIDToStringID(typeID),
@@ -80,10 +186,10 @@ vscDevtools.descriptorInfo = (function () {
                     id: typeID,
                     key: i,
                     type: descType,
-                    value: this._getValue(theDesc, descType, typeID),
+                    value: this._getValue(desc, descType, typeID),
                 };
             } else {
-                descProperties = this._getValue(theDesc, descType, typeID);
+                descProperties = this._getValue(desc, descType, typeID);
             }
 
             var objectName = this._getBestName(typeID);
@@ -107,7 +213,7 @@ vscDevtools.descriptorInfo = (function () {
 
                 case 'DescValueType.ENUMERATEDTYPE':
                     descProperties.enumerationType = typeIDToStringID(
-                        theDesc.getEnumerationType(typeID),
+                        desc.getEnumerationType(typeID),
                     );
                     break;
 
@@ -204,10 +310,7 @@ vscDevtools.descriptorInfo = (function () {
                         listItemProperties = this._getDescObject(listItemValue, {});
                     }
 
-                    var listItemObject = {};
-                    listItemObject[descStringID] = listItemProperties;
-
-                    listArray.push(listItemObject);
+                    listArray.push(listItemProperties);
                     break;
 
                 case 'DescValueType.LISTTYPE':
@@ -278,81 +381,81 @@ vscDevtools.descriptorInfo = (function () {
      * http://www.ps-scripts.com/
      *
      * Handler function to get the value of an Action Descriptor
-     * @param {Object} Action Descriptor
-     * @param {String} Action Descriptor type
-     * @param {Number} Action Descriptor Key / Index
+     * @param {ActionDescriptor} desc
+     * @param {string} descType Descriptor type
+     * @param {number} position Key / Index
      */
-    DescriptorInfo.prototype._getValue = function (theDesc, descType, position) {
+    DescriptorInfo.prototype._getValue = function (desc, descType, position) {
         switch (descType) {
             case 'DescValueType.BOOLEANTYPE':
-                return theDesc.getBoolean(position);
+                return desc.getBoolean(position);
 
             case 'DescValueType.CLASSTYPE':
-                return theDesc.getClass(position);
+                return desc.getClass(position);
 
             case 'DescValueType.DOUBLETYPE':
-                return theDesc.getDouble(position);
+                return desc.getDouble(position);
 
             case 'DescValueType.ENUMERATEDTYPE':
-                return typeIDToStringID(theDesc.getEnumerationValue(position));
+                return typeIDToStringID(desc.getEnumerationValue(position));
 
             case 'DescValueType.INTEGERTYPE':
-                return theDesc.getInteger(position);
+                return desc.getInteger(position);
 
             case 'DescValueType.LISTTYPE':
-                return theDesc.getList(position);
+                return desc.getList(position);
 
             case 'DescValueType.OBJECTTYPE':
-                return theDesc.getObjectValue(position);
+                return desc.getObjectValue(position);
 
             case 'DescValueType.REFERENCETYPE':
-                return theDesc.getReference(position);
+                return desc.getReference(position);
 
             case 'DescValueType.STRINGTYPE':
                 var str = '';
                 if (typeIDToStringID(position) === 'XMPMetadataAsUTF8') {
                     return (
                         str +
-                        JSON.stringify(theDesc.getString(position)).substring(
+                        JSON.stringify(desc.getString(position)).substring(
                             0,
                             this.descParams.maxXMPLimit,
                         )
                     );
                 } else {
-                    return str + theDesc.getString(position);
+                    return str + desc.getString(position);
                 }
 
             case 'DescValueType.UNITDOUBLE':
-                return theDesc.getUnitDoubleValue(position);
+                return desc.getUnitDoubleValue(position);
 
             case 'DescValueType.ALIASTYPE':
-                return decodeURI(theDesc.getPath(position));
+                return decodeURI(desc.getPath(position));
 
             case 'DescValueType.RAWTYPE':
-                return theDesc.getData(position).substring(0, this.descParams.maxRawLimit);
+                return desc.getData(position).substring(0, this.descParams.maxRawLimit);
 
             case 'ReferenceFormType.CLASSTYPE':
-                return theDesc.getDesiredClass();
+                return desc.getDesiredClass();
 
             case 'ReferenceFormType.ENUMERATED':
-                var enumeratedID = theDesc.getEnumeratedValue();
+                var enumeratedID = desc.getEnumeratedValue();
                 return this._getBestName(enumeratedID);
 
             case 'ReferenceFormType.IDENTIFIER':
-                return theDesc.getIdentifier();
+                return desc.getIdentifier();
 
             case 'ReferenceFormType.INDEX':
-                return theDesc.getIndex();
+                return desc.getIndex();
 
             case 'ReferenceFormType.NAME':
                 str = '';
-                return str + theDesc.getName();
+                return str + desc.getName();
 
             case 'ReferenceFormType.OFFSET':
-                return theDesc.getOffset();
+                return desc.getOffset();
 
             case 'ReferenceFormType.PROPERTY':
-                var propertyID = theDesc.getProperty();
+                var propertyID = desc.getProperty();
                 return this._getBestName(propertyID);
 
             default:
@@ -387,10 +490,10 @@ vscDevtools.descriptorInfo = (function () {
     };
 
     /**
-     * @private
-     *
      * Handler function to get the best name for typeID
-     * @param {Number} typeID
+     * @private
+     * @param {number} typeID
+     * @returns {string}
      */
     DescriptorInfo.prototype._getBestName = function (typeID) {
         var stringValue = typeIDToStringID(typeID);

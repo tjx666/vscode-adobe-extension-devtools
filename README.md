@@ -6,6 +6,16 @@
 
 ![JSX module definition jump](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/jump_to_definition.gif?raw=true)
 
+You need to set fie associations to tell vscode treat `.jsx` as javascript:
+
+```json
+{
+    "files.associations": {
+            "**/JSX/**/*.jsx": "javascript"
+    }
+}
+```
+
 ### AE Composition Tree View
 
 For MacOS Only Now, you need to manually refresh the outline to get latest info about activate composition.
