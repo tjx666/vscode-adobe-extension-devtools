@@ -24,12 +24,11 @@ For MacOS Only Now, you need to manually refresh the outline to get latest info 
 
 ![AE Composition Tree View](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/ae_composition_outline.gif?raw=true)
 
-
 ## PS Features
 
 ### View Active Layer Descriptor Info
 
-You can open an editor to viwe the current active layer descriptor info with command `View Active Layer Descriptor Info`:
+You can open an editor to view the current active layer descriptor info with command `View Active Layer Descriptor Info`:
 
 ![Layer Info](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/layer_info.gif?raw=true)
 
@@ -56,7 +55,7 @@ Select the id you want to transform and call corresponding command, support foll
 
 - [x] JSX module definition jump
 - [x] AE Composition Tree View
-- [x] Snippets, recommend: ![YuTengjing.ytj-snippets](https://marketplace.visualstudio.com/items?itemName=YuTengjing.ytj-snippets)
+- [x] Snippets, recommend: [My personal snippets](https://marketplace.visualstudio.com/items?itemName=YuTengjing.ytj-snippets)
 - [x] ps id transform between charID, StringID, typeID
 
 ## Related
