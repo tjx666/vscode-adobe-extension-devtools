@@ -4,7 +4,8 @@ import { JsonValueNode, PropertyGroupNode, PropertyNode } from './afterEffects/a
 import CompositionOutlineProvider from './afterEffects/compositionOutline';
 import configuration from './configuration';
 import JsxModuleDefinitionProvider from './jsxModuleDefinitionProvider';
-import { layerInfoEditor } from './photoshop/layerInfoEditor'
+import { layerInfoDiffEditor } from './photoshop/layerInfoDiffEditor';
+import { layerInfoEditor } from './photoshop/layerInfoEditor';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);
@@ -12,34 +13,42 @@ export function activate(context: vscode.ExtensionContext) {
     configuration.update(context);
     workspace.onDidChangeConfiguration(() => {
         configuration.update(context);
-    }, context.subscriptions)
-
-    const jsxModuleDefinitionProvider = vscode.languages.registerDefinitionProvider(
-        ['javascript'],
-        new JsxModuleDefinitionProvider(),
-    );
-    context.subscriptions.push(jsxModuleDefinitionProvider);
+    }, context.subscriptions);
 
     const compositionOutlineProvider = new CompositionOutlineProvider();
     vscode.window.createTreeView('aeCompositionOutline', {
         treeDataProvider: compositionOutlineProvider,
         showCollapseAll: true,
     });
-    vscode.commands.registerCommand('adobeExtensionDevtools.refreshAeCompositionOutline', () =>
-        compositionOutlineProvider.refresh(),
-    );
-    vscode.commands.registerCommand(
-        'adobeExtensionDevtools.copyPropertyPath',
-        (node: PropertyNode | PropertyGroupNode) =>
-            compositionOutlineProvider.copyPropertyPath(node),
-    );
-    vscode.commands.registerCommand(
-        'adobeExtensionDevtools.copyPropertyValue',
-        (node: JsonValueNode) => compositionOutlineProvider.copyPropertyValue(node),
-    );
 
-    vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewLayerInfo', () =>
-        layerInfoEditor.open(),
+    context.subscriptions.push(
+        vscode.languages.registerDefinitionProvider(
+            ['javascript'],
+            new JsxModuleDefinitionProvider(),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.refreshAeCompositionOutline', () =>
+            compositionOutlineProvider.refresh(),
+        ),
+
+        vscode.commands.registerCommand(
+            'adobeExtensionDevtools.copyPropertyPath',
+            (node: PropertyNode | PropertyGroupNode) =>
+                compositionOutlineProvider.copyPropertyPath(node),
+        ),
+
+        vscode.commands.registerCommand(
+            'adobeExtensionDevtools.copyPropertyValue',
+            (node: JsonValueNode) => compositionOutlineProvider.copyPropertyValue(node),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewLayerInfo', () =>
+            layerInfoEditor.open(),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewLayerInfoDiff', () =>
+            layerInfoDiffEditor.open(),
+        ),
     );
 }
 
