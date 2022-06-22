@@ -14,3 +14,20 @@ export async function replaceEditorWholeText(editor: TextEditor, replace: string
         editBuilder.replace(wholeTextRange, replace);
     });
 }
+
+export async function replaceActiveEditorSelectionsText(
+    getReplaceTextList: (selectionsTextList: string[]) => Promise<string[]>,
+) {
+    const editor = window.activeTextEditor;
+    if (!editor) return;
+
+    const document = editor.document;
+    const selections = editor.selections;
+    const selectedTextList = selections.map((s) => document.getText(s));
+    const replaceTextList = await getReplaceTextList(selectedTextList);
+    await editor.edit((editBuilder) => {
+        replaceTextList.forEach((replaceText, index) =>
+            editBuilder.replace(selections[index], String(replaceText)),
+        );
+    });
+}

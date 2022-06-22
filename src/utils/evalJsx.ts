@@ -94,7 +94,7 @@ const adapterMap = new Map<HostApp, EvalScriptAdapter>([
     ['PS', new EvalPsScriptAdapter()],
 ]);
 
-interface EvalOptions {
+export interface EvalOptions {
     argumentObject?: Record<string, any>;
     placeholders?: Record<string, any>;
 }

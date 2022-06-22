@@ -26,9 +26,8 @@ For MacOS Only Now, you need to manually refresh the outline to get latest info 
 
 - [x] JSX module definition jump
 - [x] AE Composition Tree View
-- [ ] Snippets
-- [ ] char id to string id
-- [ ] string id to char id
+- [x] Snippets, recommend: ![YuTengjing.ytj-snippets](https://marketplace.visualstudio.com/items?itemName=YuTengjing.ytj-snippets)
+- [x] ps id transform between charID, StringID, typeID
 - [ ] PS Document Tree View
 - [ ] Paste last operation AM script
 

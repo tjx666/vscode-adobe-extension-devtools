@@ -6,6 +6,15 @@ import configuration from './configuration';
 import JsxModuleDefinitionProvider from './jsxModuleDefinitionProvider';
 import { layerInfoDiffEditor } from './photoshop/layerInfoDiffEditor';
 import { layerInfoEditor } from './photoshop/layerInfoEditor';
+import {
+    charIDToTypeID,
+    charIDToStringID,
+    stringIDToCharID,
+    stringIDToTypeID,
+    typeIDToCharID,
+    typeIDToStringID,
+} from './photoshop/idTransform';
+import { replaceActiveEditorSelectionsText } from './utils/editor';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);
@@ -48,6 +57,37 @@ export function activate(context: vscode.ExtensionContext) {
 
         vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewLayerInfoDiff', () =>
             layerInfoDiffEditor.open(),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.charIDToTypeID', () => {
+            replaceActiveEditorSelectionsText((selectionsTextList) => {
+                return charIDToTypeID(selectionsTextList).then((ids) =>
+                    ids.map((id) => String(id)),
+                );
+            });
+        }),
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.charIDToStringID', () =>
+            replaceActiveEditorSelectionsText(charIDToStringID),
+        ),
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.stringIDToTypeID', () => {
+            replaceActiveEditorSelectionsText((selectionsTextList) => {
+                return stringIDToTypeID(selectionsTextList).then((ids) =>
+                    ids.map((id) => String(id)),
+                );
+            });
+        }),
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.stringIDToCharID', () =>
+            replaceActiveEditorSelectionsText(stringIDToCharID),
+        ),
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.typeIDToCharID', () =>
+            replaceActiveEditorSelectionsText((selectionsTextList) =>
+                typeIDToCharID(selectionsTextList.map((t) => parseInt(t, 10))),
+            ),
+        ),
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.typeIDToStringID', () =>
+            replaceActiveEditorSelectionsText((selectionsTextList) =>
+                typeIDToStringID(selectionsTextList.map((t) => parseInt(t, 10))),
+            ),
         ),
     );
 }

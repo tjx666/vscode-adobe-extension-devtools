@@ -27,7 +27,13 @@
         "onLanguage:javascript",
         "onCommand:adobeExtensionDevtools.refreshAeCompositionOutline",
         "onCommand:adobeExtensionDevtools.ps.viewLayerInfo",
-        "onCommand:adobeExtensionDevtools.ps.viewLayerInfoDiff"
+        "onCommand:adobeExtensionDevtools.ps.viewLayerInfoDiff",
+        "onCommand:adobeExtensionDevtools.ps.charIDToTypeID",
+        "onCommand:adobeExtensionDevtools.ps.charIDToStringID",
+        "onCommand:adobeExtensionDevtools.ps.stringIDToTypeID",
+        "onCommand:adobeExtensionDevtools.ps.stringIDToCharID",
+        "onCommand:adobeExtensionDevtools.ps.typeIDToCharID",
+        "onCommand:adobeExtensionDevtools.ps.typeIDToStringID"
     ],
     "main": "./out/src/extension.js",
     "contributes": {
@@ -91,6 +97,30 @@
             {
                 "command": "adobeExtensionDevtools.ps.viewLayerInfoDiff",
                 "title": "View Current Selected Layer Descriptor Info in Diff Mode"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.charIDToTypeID",
+                "title": "Action Manager: char id to type id"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.charIDToStringID",
+                "title": "Action Manager: char id to string id"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.stringIDToTypeID",
+                "title": "Action Manager: string id to type id"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.stringIDToCharID",
+                "title": "Action Manager: string id to char id"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.typeIDToCharID",
+                "title": "Action Manager: type id to char id"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.typeIDToStringID",
+                "title": "Action Manager: type id to string id"
             }
         ],
         "configuration": {
