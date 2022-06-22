@@ -1,10 +1,19 @@
 # Change Log
 
+## [0.1.0] - 2022-06-23
+
+### Added
+
+- new setting: adobeExtensionDevtools.psAppFolderPath
+- ps feature: `View Active Layer Descriptor Info`
+- ps feature: `View Active Layer Descriptor Info in Diff Editor`
+- ps feature: `Action Manager ids transform between charID, StringID, typeID`
+
 ## [0.0.5] - 2022-06-14
 
 ### Added
 
-- new settings: `adobeExtensionDevtools.aeAppPath`
+- new setting: `adobeExtensionDevtools.aeAppPath`
 
 ## [0.0.4] - 2022-04-30
 

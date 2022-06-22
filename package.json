@@ -2,7 +2,7 @@
     "name": "adobe-extension-devtools",
     "displayName": "Adobe Extension Development Tools",
     "description": "provide some useful tools for adobe extension development",
-    "version": "0.0.5",
+    "version": "0.1.0",
     "publisher": "YuTengjing",
     "icon": "assets/logo.png",
     "engines": {
@@ -84,43 +84,43 @@
             },
             {
                 "command": "adobeExtensionDevtools.copyPropertyPath",
-                "title": "Copy Property Path"
+                "title": "Adobe Devtools: Copy Property Path"
             },
             {
                 "command": "adobeExtensionDevtools.copyPropertyValue",
-                "title": "Copy Value"
+                "title": "Adobe Devtools: Copy Value"
             },
             {
                 "command": "adobeExtensionDevtools.ps.viewLayerInfo",
-                "title": "View Current Selected Layer Descriptor Info"
+                "title": "View Active Layer Descriptor Info"
             },
             {
                 "command": "adobeExtensionDevtools.ps.viewLayerInfoDiff",
-                "title": "View Current Selected Layer Descriptor Info in Diff Mode"
+                "title": "View Active Layer Descriptor Info in Diff Editor"
             },
             {
                 "command": "adobeExtensionDevtools.ps.charIDToTypeID",
-                "title": "Action Manager: char id to type id"
+                "title": "convert char id to type id"
             },
             {
                 "command": "adobeExtensionDevtools.ps.charIDToStringID",
-                "title": "Action Manager: char id to string id"
+                "title": "convert char id to string id"
             },
             {
                 "command": "adobeExtensionDevtools.ps.stringIDToTypeID",
-                "title": "Action Manager: string id to type id"
+                "title": "convert string id to type id"
             },
             {
                 "command": "adobeExtensionDevtools.ps.stringIDToCharID",
-                "title": "Action Manager: string id to char id"
+                "title": "convert string id to char id"
             },
             {
                 "command": "adobeExtensionDevtools.ps.typeIDToCharID",
-                "title": "Action Manager: type id to char id"
+                "title": "convert type id to char id"
             },
             {
                 "command": "adobeExtensionDevtools.ps.typeIDToStringID",
-                "title": "Action Manager: type id to string id"
+                "title": "convert type id to string id"
             }
         ],
         "configuration": {
@@ -128,7 +128,7 @@
             "properties": {
                 "adobeExtensionDevtools.aeAppPath": {
                     "type": "string",
-                    "title": "The path to Adobe After Effects 20xx.app"
+                    "title": "For example: /Applications/Adobe After Effects 2021/Adobe After Effects 2021.app"
                 },
                 "adobeExtensionDevtools.aeCompositionOutline.displayedLayerProperties": {
                     "type": "array",
@@ -157,7 +157,7 @@
                 },
                 "adobeExtensionDevtools.psAppFolderPath": {
                     "type": "string",
-                    "title": "The path to Adobe Photoshop 20xx folder, not 20xx.app"
+                    "title": "For example: /Applications/Adobe Photoshop 2021"
                 }
             }
         },

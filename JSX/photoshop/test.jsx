@@ -1,4 +1,0 @@
-(function () {
-    $.writeln(typeIDToCharID(stringIDToTypeID()));
-})();
-

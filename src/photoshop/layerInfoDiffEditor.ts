@@ -44,6 +44,9 @@ class LayerInfoDiffEditor {
                 await replaceEditorWholeText(afterEditor, text);
             }
         }
+
+        await vscode.languages.setTextDocumentLanguage(beforeEditor.document, 'jsonc');
+        await vscode.languages.setTextDocumentLanguage(afterEditor.document, 'jsonc');
     }
 }
 
