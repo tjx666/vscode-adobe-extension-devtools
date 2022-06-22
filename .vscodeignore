@@ -2,6 +2,8 @@
 .vscode/
 .gitignore
 **/tsconfig.json
+**/jsconfig.json
+**/.eslintrc.js
 .eslintrc.json
 .eslintignore
 .prettierrc
@@ -17,5 +19,15 @@ test/
 .vscode-test/
 test-workspace/
 out/test/
+playground
+assets/screenshot
 *.vsix
 *.zip
+
+# under node_modules
+node_modules/**/*.md
+node_modules/**/LICENSE
+node_modules/**/license
+node_modules/**/README.md
+node_modules/**/readme.md
+node_modules/**/CHANGELOG.md
