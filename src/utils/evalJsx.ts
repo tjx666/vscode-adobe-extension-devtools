@@ -4,7 +4,7 @@ import pathUtils, { resolve } from 'path';
 import execa from 'execa';
 import { stringify } from 'javascript-stringify';
 
-import { EXTENSION_DIR, JSX_DIR } from '../constants';
+import { DEBUG_MODE, EXTENSION_DIR, JSX_DIR } from '../constants';
 import { dateFormat, escapeStringAppleScript, pathExists, uuidV4 } from '../utils/common';
 import configuration from '../configuration';
 
@@ -172,7 +172,9 @@ export async function evalScript(host: HostApp, script: string, options?: EvalOp
     }
 
     // if execute failed, keep the scripts
-    // await Promise.all([fs.rm(appleScriptPath), fs.rm(jsxOutputFilePath)]);
+    if (!DEBUG_MODE) {
+        await Promise.all([fs.rm(appleScriptPath), fs.rm(jsxOutputFilePath)]);
+    }
 
     return result;
 }

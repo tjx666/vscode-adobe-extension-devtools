@@ -1,5 +1,7 @@
 # Adobe Extension Development Tools
 
+> **Note**: Only for MacOS now!
+
 ## ExtendScript Features
 
 ### JSX module definition jump
@@ -11,7 +13,7 @@ You need to set fie associations to tell vscode treat `.jsx` as javascript:
 ```json
 {
     "files.associations": {
-            "**/JSX/**/*.jsx": "javascript"
+            "**/jsx_folder/**/*.jsx": "javascript"
     }
 }
 ```
@@ -20,7 +22,7 @@ You need to set fie associations to tell vscode treat `.jsx` as javascript:
 
 ### AE Composition Tree View
 
-For MacOS Only Now, you need to manually refresh the outline to get latest info about activate composition.
+You need to manually refresh the outline to get latest info about active composition.
 
 ![AE Composition Tree View](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/ae_composition_outline.gif?raw=true)
 
@@ -34,11 +36,11 @@ You can open an editor to view the current active layer descriptor info with com
 
 ### View Active Layer Descriptor Info in Diff Editor
 
-When you develop ps extension, you may often need to compare the layer descriptor info before and after an operation. Call command `View Active Layer Descriptor Info in Diff Editor` will open a diff editor, and fill the before editor with latest active layer descriptor info. Call twice will fill the latest info to another editor.
+When you develop ps extension, you may often need to compare the layer descriptor info before and after an operation. Call command `View Active Layer Descriptor Info in Diff Editor` will open a diff editor, and fill the before editor with latest active layer descriptor info. Call twice will fill the latest info to after editor.
 
 ![Layer Info Diff Editor](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/layer_info_diff.gif?raw=true)
 
-### Action Manager ids transform between charID, StringID, typeID
+### Action Manager ids transform between charID, stringID, typeID
 
 Select the id you want to transform and call corresponding command, support following commands:
 

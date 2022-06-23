@@ -23,6 +23,9 @@
                 "**/.vscode/extensions/"
             ],
             "sourceMaps": true,
+            "env": {
+                "VSCODE_DEBUG_MODE": "true"
+            },
             "preLaunchTask": "${defaultBuildTask}"
         },
         {
@@ -41,6 +44,9 @@
                 "**/resources/app/out/vs/**"
             ],
             "sourceMaps": true,
+            "env": {
+                "VSCODE_DEBUG_MODE": "true"
+            },
             "preLaunchTask": "${defaultBuildTask}"
         },
         {

@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.1.1] - 2022-06-23
+
+### Changed
+
+- readme typo
+- remove temp scripts due to eval jsx in production mode
+
 ## [0.1.0] - 2022-06-23
 
 ### Added
