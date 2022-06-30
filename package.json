@@ -6,7 +6,7 @@
     "publisher": "YuTengjing",
     "icon": "assets/logo.png",
     "engines": {
-        "vscode": "^1.68.0"
+        "vscode": "^1.68.1"
     },
     "categories": [
         "Other"
@@ -28,6 +28,8 @@
         "onCommand:adobeExtensionDevtools.refreshAeCompositionOutline",
         "onCommand:adobeExtensionDevtools.ps.viewLayerInfo",
         "onCommand:adobeExtensionDevtools.ps.viewLayerInfoDiff",
+        "onCommand:adobeExtensionDevtools.ps.viewDocumentInfo",
+        "onCommand:adobeExtensionDevtools.ps.viewDocumentInfoDiff",
         "onCommand:adobeExtensionDevtools.ps.charIDToTypeID",
         "onCommand:adobeExtensionDevtools.ps.charIDToStringID",
         "onCommand:adobeExtensionDevtools.ps.stringIDToTypeID",
@@ -121,6 +123,14 @@
             {
                 "command": "adobeExtensionDevtools.ps.typeIDToStringID",
                 "title": "convert type id to string id"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewDocumentInfo",
+                "title": "View Active Document Descriptor Info"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewDocumentInfoDiff",
+                "title": "View Active Document Descriptor Info in Diff Editor"
             }
         ],
         "configuration": {
@@ -158,6 +168,11 @@
                 "adobeExtensionDevtools.psAppFolderPath": {
                     "type": "string",
                     "title": "For example: /Applications/Adobe Photoshop 2021"
+                },
+                "adobeExtensionDevtools.ps.descriptorInfoInsertTimeStr": {
+                    "type": "boolean",
+                    "title": "whether insert time string before descriptor info",
+                    "default": true
                 }
             }
         },
@@ -180,10 +195,10 @@
         "@types/glob": "^7.2.0",
         "@types/mocha": "^9.1.1",
         "@types/node": "18.0.0",
-        "@types/vscode": "^1.68.0",
-        "@typescript-eslint/eslint-plugin": "^5.29.0",
-        "@typescript-eslint/parser": "^5.29.0",
-        "@vscode/test-electron": "^2.1.4",
+        "@types/vscode": "^1.68.1",
+        "@typescript-eslint/eslint-plugin": "^5.30.0",
+        "@typescript-eslint/parser": "^5.30.0",
+        "@vscode/test-electron": "^2.1.5",
         "after-effects": "^0.4.15",
         "eslint": "^8.18.0",
         "eslint-config-prettier": "^8.5.0",
