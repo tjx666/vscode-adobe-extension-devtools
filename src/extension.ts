@@ -15,6 +15,8 @@ import {
     typeIDToStringID,
 } from './photoshop/idTransform';
 import { replaceActiveEditorSelectionsText } from './utils/editor';
+import { documentInfoEditor } from './photoshop/documentInfoEditor';
+import { documentInfoDiffEditor } from './photoshop/documentInfoDiffEditor';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);
@@ -57,6 +59,14 @@ export function activate(context: vscode.ExtensionContext) {
 
         vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewLayerInfoDiff', () =>
             layerInfoDiffEditor.open(),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewDocumentInfo', () =>
+            documentInfoEditor.open(),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewDocumentInfoDiff', () =>
+            documentInfoDiffEditor.open(),
         ),
 
         vscode.commands.registerCommand('adobeExtensionDevtools.ps.charIDToTypeID', () => {

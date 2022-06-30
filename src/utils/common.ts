@@ -94,6 +94,39 @@ function once<F extends Function>(f: F) {
     return temp[functionName];
 }
 
+export function arrangeKeys<T extends object>(
+    target: T,
+    frontKeys: Array<keyof T> = [],
+    backKeys: Array<keyof T> = [],
+) {
+    const keySet = new Set<keyof T>(frontKeys);
+    const result: Record<keyof T, any> = {} as any;
+
+    function putKeys(keys: Array<keyof T>) {
+        for (const key of keys) {
+            if (Object.prototype.hasOwnProperty.call(target, key)) {
+                result[key] = target[key];
+            }
+        }
+    }
+
+    if (frontKeys.length) {
+        putKeys(frontKeys);
+    }
+
+    for (const [key, value] of Object.entries(target) as Array<[keyof T, any]>) {
+        if (!keySet.has(key)) {
+            result[key] = value;
+        }
+    }
+
+    if (backKeys.length) {
+        putKeys(backKeys);
+    }
+
+    return result;
+}
+
 export {
     uuidV4,
     pathExists,

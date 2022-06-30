@@ -1,5 +1,9 @@
 import vscode, { ExtensionContext } from 'vscode';
 
+interface PsConfiguration {
+    descriptorInfoInsertTimeStr: boolean;
+}
+
 class Configuration {
     displayedLayerProperties: string[] = [];
     excludePropertyPaths: string[] = [];
@@ -7,6 +11,9 @@ class Configuration {
     aeAppPath: string | undefined;
     psAppFolderPath: string | undefined;
     globalStoragePath = '';
+    ps: PsConfiguration = {
+        descriptorInfoInsertTimeStr: true,
+    };
 
     constructor() {
         this.update();
@@ -26,9 +33,10 @@ class Configuration {
             latestConfiguration.get('aeCompositionOutline.showEmptyPropertyGroup') ?? false;
         this.aeAppPath = latestConfiguration.get('aeAppPath');
         this.psAppFolderPath = latestConfiguration.get('psAppFolderPath');
+        this.ps.descriptorInfoInsertTimeStr =
+            latestConfiguration.get('ps.descriptorInfoInsertTimeStr') ?? true;
     }
 }
 
 const configuration = new Configuration();
-
 export default configuration;
