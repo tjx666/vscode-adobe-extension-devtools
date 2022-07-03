@@ -39,7 +39,8 @@
         "onCommand:adobeExtensionDevtools.ps.stringIDToCharID",
         "onCommand:adobeExtensionDevtools.ps.typeIDToCharID",
         "onCommand:adobeExtensionDevtools.ps.typeIDToStringID",
-        "onCommand:adobeExtensionDevtools.ps.viewXMPMetadataXML"
+        "onCommand:adobeExtensionDevtools.ps.viewXMPMetadataXML",
+        "onCommand:adobeExtensionDevtools.ps.viewXMPMetadata"
     ],
     "main": "./out/src/extension.js",
     "contributes": {
@@ -151,6 +152,10 @@
             {
                 "command": "adobeExtensionDevtools.ps.viewXMPMetadataXML",
                 "title": "View Active Document XMP Metadata XML"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewXMPMetadata",
+                "title": "View Active Document XMP Metadata"
             }
         ],
         "configuration": {
@@ -193,6 +198,14 @@
                     "type": "boolean",
                     "title": "whether insert time string before descriptor info",
                     "default": true
+                },
+                "adobeExtensionDevtools.ps.includeXMPNamespaces": {
+                    "type": "array",
+                    "title": "which namespaces to show when view xmp metadata",
+                    "items": {
+                        "type": "string"
+                    },
+                    "default": []
                 }
             }
         },
@@ -216,6 +229,7 @@
         "@types/mocha": "^9.1.1",
         "@types/node": "18.0.1",
         "@types/vscode": "^1.68.1",
+        "@types/xml2js": "0.4.11",
         "@typescript-eslint/eslint-plugin": "^5.30.4",
         "@typescript-eslint/parser": "^5.30.4",
         "@vscode/test-electron": "^2.1.5",
@@ -229,6 +243,7 @@
     },
     "dependencies": {
         "execa": "^5.1.1",
-        "javascript-stringify": "^2.1.0"
+        "javascript-stringify": "^2.1.0",
+        "xml2js": "0.4.23"
     }
 }

@@ -2,6 +2,7 @@ import vscode, { ExtensionContext } from 'vscode';
 
 interface PsConfiguration {
     descriptorInfoInsertTimeStr: boolean;
+    includeXMPNamespaces: string[];
 }
 
 class Configuration {
@@ -13,6 +14,7 @@ class Configuration {
     globalStoragePath = '';
     ps: PsConfiguration = {
         descriptorInfoInsertTimeStr: true,
+        includeXMPNamespaces: [],
     };
 
     constructor() {
@@ -35,6 +37,7 @@ class Configuration {
         this.psAppFolderPath = latestConfiguration.get('psAppFolderPath');
         this.ps.descriptorInfoInsertTimeStr =
             latestConfiguration.get('ps.descriptorInfoInsertTimeStr') ?? true;
+        this.ps.includeXMPNamespaces = latestConfiguration.get('ps.includeXMPNamespaces') ?? [];
     }
 }
 

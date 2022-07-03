@@ -5,7 +5,7 @@ import { invokePsService } from './utils';
 
 export async function viewXMPMetadataXML() {
     const document = await vscode.workspace.openTextDocument(
-        vscode.Uri.parse(`untitled:/XMP Metadata`),
+        vscode.Uri.parse(`untitled:/XMP Metadata RawData`),
     );
     const editor = await vscode.window.showTextDocument(document);
     const XMPMetadataXML = (await invokePsService<any>('getXMPMetadataXML')).xmpMetadata;
