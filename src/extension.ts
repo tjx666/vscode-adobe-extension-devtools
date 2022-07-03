@@ -21,7 +21,6 @@ import { applicationInfoDiffEditor } from './photoshop/applicationInfoDiffEditor
 import { applicationInfoEditor } from './photoshop/applicationInfoEditor';
 import { viewSystemInfo } from './photoshop/viewSystemInfo';
 import { viewXMPMetadataXML } from './photoshop/viewXMPMetadataXML';
-import { viewXMPMetadata } from './photoshop/viewXMPMetadata';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);
@@ -122,7 +121,7 @@ export function activate(context: vscode.ExtensionContext) {
         ),
 
         vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewXMPMetadata', () =>
-            viewXMPMetadata(),
+            import('./photoshop/viewXMPMetadata').then(({ viewXMPMetadata }) => viewXMPMetadata()),
         ),
     );
 }

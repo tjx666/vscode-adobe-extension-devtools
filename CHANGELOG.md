@@ -1,5 +1,19 @@
 # Change Log
 
+## [0.2.0] - 2022-07-04
+
+### Added
+
+- new command `View Active Document XMP Metadata XML`
+- new command `View Active Document XMP Metadata`
+- new command `View Active Document Descriptor Info`
+- new command `View Active Document Descriptor Info in Diff Editor`
+- new command `View Active Application Descriptor Info`
+- new command `View Active Application Descriptor Info in Diff Editor`
+- new command `View Photoshop System Info`
+- new setting `adobeExtensionDevtools.ps.descriptorInfoInsertTimeStr`
+- new setting `adobeExtensionDevtools.ps.includeXMPNamespaces`
+
 ## [0.1.1] - 2022-06-23
 
 ### Changed
