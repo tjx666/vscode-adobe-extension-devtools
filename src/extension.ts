@@ -20,6 +20,7 @@ import { documentInfoDiffEditor } from './photoshop/documentInfoDiffEditor';
 import { applicationInfoDiffEditor } from './photoshop/applicationInfoDiffEditor';
 import { applicationInfoEditor } from './photoshop/applicationInfoEditor';
 import { viewSystemInfo } from './photoshop/viewSystemInfo';
+import { viewXMPMetadataXML } from './photoshop/viewXMPMetaDataXML';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);
@@ -81,7 +82,7 @@ export function activate(context: vscode.ExtensionContext) {
         ),
 
         vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewSystemInfo', () =>
-            viewSystemInfo()
+            viewSystemInfo(),
         ),
 
         vscode.commands.registerCommand('adobeExtensionDevtools.ps.charIDToTypeID', () => {
@@ -113,6 +114,10 @@ export function activate(context: vscode.ExtensionContext) {
             replaceActiveEditorSelectionsText((selectionsTextList) =>
                 typeIDToStringID(selectionsTextList.map((t) => parseInt(t, 10))),
             ),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewXMPMetadataXML', () =>
+            viewXMPMetadataXML(),
         ),
     );
 }

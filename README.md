@@ -59,7 +59,8 @@ Select the id you want to transform and call corresponding command, support foll
 - [x] AE Composition Tree View
 - [x] Snippets, recommend: [My personal snippets](https://marketplace.visualstudio.com/items?itemName=YuTengjing.ytj-snippets)
 - [x] PS view layer descriptor info, support diff mode
-- [x] PS view document descriptor info, support diff mode and ignore field setting
+- [x] PS view document descriptor info, support diff mode
+- [x] PS view application descriptor info, support diff mode
 - [x] PS id transform between charID, StringID, typeID
 
 ## Related

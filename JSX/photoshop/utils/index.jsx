@@ -37,6 +37,8 @@
 
         // utils
         // @include '../../utils/exception.jsx'
+        // @include './externalObjects.jsx'
+        // @include './xmp.jsx'
         // @include './descriptorInfo.jsx'
         // @include './layer.jsx'
     } catch(error) {

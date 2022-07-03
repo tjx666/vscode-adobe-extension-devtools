@@ -38,7 +38,8 @@
         "onCommand:adobeExtensionDevtools.ps.stringIDToTypeID",
         "onCommand:adobeExtensionDevtools.ps.stringIDToCharID",
         "onCommand:adobeExtensionDevtools.ps.typeIDToCharID",
-        "onCommand:adobeExtensionDevtools.ps.typeIDToStringID"
+        "onCommand:adobeExtensionDevtools.ps.typeIDToStringID",
+        "onCommand:adobeExtensionDevtools.ps.viewXMPMetadataXML"
     ],
     "main": "./out/src/extension.js",
     "contributes": {
@@ -146,6 +147,10 @@
             {
                 "command": "adobeExtensionDevtools.ps.typeIDToStringID",
                 "title": "convert type id to string id"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewXMPMetadataXML",
+                "title": "View Active Document XMP Metadata XML"
             }
         ],
         "configuration": {
