@@ -99,7 +99,7 @@ export function arrangeKeys<T extends object>(
     frontKeys: Array<keyof T> = [],
     backKeys: Array<keyof T> = [],
 ) {
-    const keySet = new Set<keyof T>(frontKeys);
+    const keySet = new Set<keyof T>([...frontKeys, ...backKeys]);
     const result: Record<keyof T, any> = {} as any;
 
     function putKeys(keys: Array<keyof T>) {

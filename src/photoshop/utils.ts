@@ -48,3 +48,7 @@ export async function getDocumentDescriptorInfo() {
     }
     return documentDescriptorInfoObject;
 }
+
+export async function getApplicationDescriptorInfo() {
+    return invokePsService<object>('getApplicationDescriptorInfo');
+}

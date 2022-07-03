@@ -17,6 +17,9 @@ import {
 import { replaceActiveEditorSelectionsText } from './utils/editor';
 import { documentInfoEditor } from './photoshop/documentInfoEditor';
 import { documentInfoDiffEditor } from './photoshop/documentInfoDiffEditor';
+import { applicationInfoDiffEditor } from './photoshop/applicationInfoDiffEditor';
+import { applicationInfoEditor } from './photoshop/applicationInfoEditor';
+import { viewSystemInfo } from './photoshop/viewSystemInfo';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log(`Activate extension ${context.extension.id}`);
@@ -67,6 +70,18 @@ export function activate(context: vscode.ExtensionContext) {
 
         vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewDocumentInfoDiff', () =>
             documentInfoDiffEditor.open(),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewApplicationInfo', () =>
+            applicationInfoEditor.open(),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewApplicationInfoDiff', () =>
+            applicationInfoDiffEditor.open(),
+        ),
+
+        vscode.commands.registerCommand('adobeExtensionDevtools.ps.viewSystemInfo', () =>
+            viewSystemInfo()
         ),
 
         vscode.commands.registerCommand('adobeExtensionDevtools.ps.charIDToTypeID', () => {

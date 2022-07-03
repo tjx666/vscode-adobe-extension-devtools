@@ -30,6 +30,9 @@
         "onCommand:adobeExtensionDevtools.ps.viewLayerInfoDiff",
         "onCommand:adobeExtensionDevtools.ps.viewDocumentInfo",
         "onCommand:adobeExtensionDevtools.ps.viewDocumentInfoDiff",
+        "onCommand:adobeExtensionDevtools.ps.viewApplicationInfo",
+        "onCommand:adobeExtensionDevtools.ps.viewApplicationInfoDiff",
+        "onCommand:adobeExtensionDevtools.ps.viewSystemInfo",
         "onCommand:adobeExtensionDevtools.ps.charIDToTypeID",
         "onCommand:adobeExtensionDevtools.ps.charIDToStringID",
         "onCommand:adobeExtensionDevtools.ps.stringIDToTypeID",
@@ -101,6 +104,26 @@
                 "title": "View Active Layer Descriptor Info in Diff Editor"
             },
             {
+                "command": "adobeExtensionDevtools.ps.viewDocumentInfo",
+                "title": "View Active Document Descriptor Info"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewDocumentInfoDiff",
+                "title": "View Active Document Descriptor Info in Diff Editor"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewApplicationInfo",
+                "title": "View Active Application Descriptor Info"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewApplicationInfoDiff",
+                "title": "View Active Application Descriptor Info in Diff Editor"
+            },
+            {
+                "command": "adobeExtensionDevtools.ps.viewSystemInfo",
+                "title": "View Photoshop System Info"
+            },
+            {
                 "command": "adobeExtensionDevtools.ps.charIDToTypeID",
                 "title": "convert char id to type id"
             },
@@ -123,14 +146,6 @@
             {
                 "command": "adobeExtensionDevtools.ps.typeIDToStringID",
                 "title": "convert type id to string id"
-            },
-            {
-                "command": "adobeExtensionDevtools.ps.viewDocumentInfo",
-                "title": "View Active Document Descriptor Info"
-            },
-            {
-                "command": "adobeExtensionDevtools.ps.viewDocumentInfoDiff",
-                "title": "View Active Document Descriptor Info in Diff Editor"
             }
         ],
         "configuration": {
