@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.2] - 2022-07-05
+
+### Fixed
+
+- README gif links
+
 ## [0.2.1] - 2022-07-05
 
 ### Changed

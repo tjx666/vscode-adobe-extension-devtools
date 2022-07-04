@@ -2,7 +2,7 @@
     "name": "adobe-extension-devtools",
     "displayName": "Adobe Extension Development Tools",
     "description": "provide some useful tools for adobe extension development",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "publisher": "YuTengjing",
     "icon": "assets/logo.png",
     "engines": {
