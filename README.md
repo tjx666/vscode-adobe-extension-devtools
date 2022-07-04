@@ -34,11 +34,21 @@ You can open an editor to view the current active layer descriptor info with com
 
 ![Layer Info](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/layer_info.gif?raw=true)
 
+Similar commands:
+
+- `View Active Document Descriptor Info`
+- `View Application Descriptor Info`
+
 ### View Active Layer Descriptor Info in Diff Editor
 
 When you develop ps extension, you may often need to compare the layer descriptor info before and after an operation. Call command `View Active Layer Descriptor Info in Diff Editor` will open a diff editor, and fill the before editor with latest active layer descriptor info. Call twice will fill the latest info to after editor.
 
 ![Layer Info Diff Editor](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/layer_info_diff.gif?raw=true)
+
+Similar commands:
+
+- `View Active Document Descriptor Info in Diff Editor`
+- `View Application Descriptor Info in Diff Editor`
 
 ### Action Manager ids transform between charID, stringID, typeID
 
@@ -53,6 +63,26 @@ Select the id you want to transform and call corresponding command, support foll
 
 ![id transform](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/id_transform.gif?raw=true)
 
+### View System Info
+
+![View Photoshop System Info](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/view_system_info.gif?raw=true)
+
+### View Active Document XMP Metadata Raw Data XML
+
+![View Active Document XMP Metadata Raw Data XML](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/xmp_metadata_xml?raw=true)
+
+### View Active Document XMP Metadata
+
+You need to set which namespaces you want to check:
+
+```json
+{
+   "adobeExtensionDevtools.ps.includeXMPNamespaces": ["hammer.ps-export"]
+}
+```
+
+![View Active Document XMP Metadata Raw Data XML](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/xmp_metadata?raw=true)
+
 ## TODOs
 
 - [x] JSX module definition jump
@@ -62,6 +92,9 @@ Select the id you want to transform and call corresponding command, support foll
 - [x] PS view document descriptor info, support diff mode
 - [x] PS view application descriptor info, support diff mode
 - [x] PS id transform between charID, StringID, typeID
+- [x] PS view system info
+- [x] PS view XMP Metadata
+- [ ] Windows Support
 
 ## Related
 
