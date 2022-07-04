@@ -69,7 +69,7 @@ Select the id you want to transform and call corresponding command, support foll
 
 ### View Active Document XMP Metadata Raw Data XML
 
-![View Active Document XMP Metadata Raw Data XML](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/xmp_metadata_xml?raw=true)
+![View Active Document XMP Metadata Raw Data XML](https://github.com/tjx666/vscode-adobe-extension-devtools/blob/master/assets/screenshot/xmp_metadata_xml.gif?raw=true)
 
 ### View Active Document XMP Metadata
 
@@ -81,7 +81,7 @@ You need to set which namespaces you want to check:
 }
 ```
 
-![View Active Document XMP Metadata Raw Data XML](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/xmp_metadata?raw=true)
+![View Active Document XMP Metadata Raw Data XML](https://github.com/tjx666/adobe-extension-devtools/blob/master/assets/screenshot/xmp_metadata.gif?raw=true)
 
 ## TODOs
 
