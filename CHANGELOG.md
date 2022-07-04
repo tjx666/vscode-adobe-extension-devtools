@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.1] - 2022-07-05
+
+### Changed
+
+- add docs about new features of version 0.2.0
+
 ## [0.2.0] - 2022-07-04
 
 ### Added

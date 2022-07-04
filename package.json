@@ -2,7 +2,7 @@
     "name": "adobe-extension-devtools",
     "displayName": "Adobe Extension Development Tools",
     "description": "provide some useful tools for adobe extension development",
-    "version": "0.2.0",
+    "version": "0.2.1",
     "publisher": "YuTengjing",
     "icon": "assets/logo.png",
     "engines": {
@@ -32,13 +32,13 @@
         "onCommand:adobeExtensionDevtools.ps.viewDocumentInfoDiff",
         "onCommand:adobeExtensionDevtools.ps.viewApplicationInfo",
         "onCommand:adobeExtensionDevtools.ps.viewApplicationInfoDiff",
-        "onCommand:adobeExtensionDevtools.ps.viewSystemInfo",
         "onCommand:adobeExtensionDevtools.ps.charIDToTypeID",
         "onCommand:adobeExtensionDevtools.ps.charIDToStringID",
         "onCommand:adobeExtensionDevtools.ps.stringIDToTypeID",
         "onCommand:adobeExtensionDevtools.ps.stringIDToCharID",
         "onCommand:adobeExtensionDevtools.ps.typeIDToCharID",
         "onCommand:adobeExtensionDevtools.ps.typeIDToStringID",
+        "onCommand:adobeExtensionDevtools.ps.viewSystemInfo",
         "onCommand:adobeExtensionDevtools.ps.viewXMPMetadataXML",
         "onCommand:adobeExtensionDevtools.ps.viewXMPMetadata"
     ],
@@ -115,15 +115,11 @@
             },
             {
                 "command": "adobeExtensionDevtools.ps.viewApplicationInfo",
-                "title": "View Active Application Descriptor Info"
+                "title": "View Application Descriptor Info"
             },
             {
                 "command": "adobeExtensionDevtools.ps.viewApplicationInfoDiff",
-                "title": "View Active Application Descriptor Info in Diff Editor"
-            },
-            {
-                "command": "adobeExtensionDevtools.ps.viewSystemInfo",
-                "title": "View Photoshop System Info"
+                "title": "View Application Descriptor Info in Diff Editor"
             },
             {
                 "command": "adobeExtensionDevtools.ps.charIDToTypeID",
@@ -150,8 +146,12 @@
                 "title": "convert type id to string id"
             },
             {
+                "command": "adobeExtensionDevtools.ps.viewSystemInfo",
+                "title": "View Photoshop System Info"
+            },
+            {
                 "command": "adobeExtensionDevtools.ps.viewXMPMetadataXML",
-                "title": "View Active Document XMP Metadata XML"
+                "title": "View Active Document XMP Metadata Raw Data XML"
             },
             {
                 "command": "adobeExtensionDevtools.ps.viewXMPMetadata",
