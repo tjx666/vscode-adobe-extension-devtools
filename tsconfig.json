@@ -3,7 +3,6 @@
         "module": "commonjs",
         "target": "ES2022",
         "rootDir": ".",
-        "outDir": "out",
         "sourceMap": true,
 
         /* Strict Type-Checking Options */

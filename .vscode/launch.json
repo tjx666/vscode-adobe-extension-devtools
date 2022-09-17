@@ -29,27 +29,6 @@
             "preLaunchTask": "${defaultBuildTask}"
         },
         {
-            "name": "Extension Tests",
-            "type": "extensionHost",
-            "request": "launch",
-            "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}",
-                "--extensionTestsPath=${workspaceFolder}/out/test",
-                "${workspaceFolder}/test-workspace"
-            ],
-            "outFiles": ["${workspaceFolder}/out/**/*.js"],
-            "skipFiles": [
-                "<node_internals>/**",
-                "**/node_modules/**",
-                "**/resources/app/out/vs/**"
-            ],
-            "sourceMaps": true,
-            "env": {
-                "VSCODE_DEBUG_MODE": "true"
-            },
-            "preLaunchTask": "${defaultBuildTask}"
-        },
-        {
             "name": "PS JSX",
             "type": "extendscript-debug",
             "request": "launch",
