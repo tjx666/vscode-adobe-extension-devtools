@@ -1,6 +1,8 @@
-import fs from 'fs/promises';
-import { default as pathUtils } from 'path';
+import { exec as _exec } from 'child_process';
 import { constants as FS_CONSTANTS } from 'fs';
+import fs from 'fs/promises';
+import pathUtils from 'path';
+import { promisify } from 'util';
 
 /**
  * generate uuid of v4 format
@@ -160,16 +162,16 @@ function getIn<T>(object: object, path: string | Array<string | number>, default
     return value ?? defaultValue;
 }
 
-export default getIn;
+export const exec = promisify(_exec);
 
 export {
-    uuidV4,
-    pathExists,
-    getFileNameWithoutExt,
-    toFixed,
-    escapeStringAppleScript,
-    dateFormat,
-    once,
-    arrangeKeys,
-    getIn,
+  arrangeKeys,
+  dateFormat,
+  escapeStringAppleScript,
+  getFileNameWithoutExt,
+  getIn,
+  once,
+  pathExists,
+  toFixed,
+  uuidV4,
 };

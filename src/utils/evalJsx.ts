@@ -1,12 +1,10 @@
 import fs from 'fs/promises';
+import { stringify } from 'javascript-stringify';
 import pathUtils, { resolve } from 'path';
 
-import execa from 'execa';
-import { stringify } from 'javascript-stringify';
-
-import { DEBUG_MODE, EXTENSION_DIR, JSX_DIR } from '../constants';
-import { dateFormat, escapeStringAppleScript, pathExists, uuidV4 } from '../utils/common';
 import configuration from '../configuration';
+import { DEBUG_MODE, EXTENSION_DIR, JSX_DIR } from '../constants';
+import { dateFormat, escapeStringAppleScript, exec, pathExists, uuidV4 } from '../utils/common';
 
 type HostApp = 'AE' | 'PS';
 
@@ -163,7 +161,7 @@ export async function evalScript(host: HostApp, script: string, options?: EvalOp
     ]);
 
     let result: any;
-    await execa('osascript', [appleScriptPath]);
+    await exec(`osascript '${appleScriptPath}'`);
     const output = await fs.readFile(jsxOutputFilePath, 'utf8');
     try {
         result = JSON.parse(output);

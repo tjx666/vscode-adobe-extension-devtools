@@ -1,8 +1,8 @@
 import vscode from 'vscode';
 import { parseStringPromise } from 'xml2js';
-import configuration from '../configuration';
-import getIn from '../utils/common';
 
+import configuration from '../configuration';
+import { getIn } from '../utils/common';
 import { replaceEditorWholeText } from '../utils/editor';
 import { invokePsService } from './utils';
 
