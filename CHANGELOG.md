@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.4] - 2022-09-18
+
+### Changed
+
+- bundle extension with esbuild to reduce extension size
+
 ## [0.2.3] - 2022-09-18
 
 ### Changed
