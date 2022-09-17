@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.2.3] - 2022-09-18
+
+### Changed
+
+- setting `adobeExtensionDevtools.ps.descriptorInfoInsertTimeStr` default value changed to `false`
+- upgrade deps
+
 ## [0.2.2] - 2022-07-05
 
 ### Fixed

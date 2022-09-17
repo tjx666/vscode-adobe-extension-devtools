@@ -36,7 +36,7 @@ class Configuration {
         this.aeAppPath = latestConfiguration.get('aeAppPath');
         this.psAppFolderPath = latestConfiguration.get('psAppFolderPath');
         this.ps.descriptorInfoInsertTimeStr =
-            latestConfiguration.get('ps.descriptorInfoInsertTimeStr') ?? true;
+            latestConfiguration.get('ps.descriptorInfoInsertTimeStr') ?? false;
         this.ps.includeXMPNamespaces = latestConfiguration.get('ps.includeXMPNamespaces') ?? [];
     }
 }

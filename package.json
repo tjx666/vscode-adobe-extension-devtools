@@ -2,7 +2,7 @@
     "name": "adobe-extension-devtools",
     "displayName": "Adobe Extension Development Tools",
     "description": "provide some useful tools for adobe extension development",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "publisher": "YuTengjing",
     "icon": "assets/logo.png",
     "engines": {
@@ -199,7 +199,7 @@
                 "adobeExtensionDevtools.ps.descriptorInfoInsertTimeStr": {
                     "type": "boolean",
                     "title": "whether insert time string before descriptor info",
-                    "default": true
+                    "default": false
                 },
                 "adobeExtensionDevtools.ps.includeXMPNamespaces": {
                     "type": "array",
