@@ -41,7 +41,33 @@ interface XMPMetaInstance {
     ): Boolean;
     dumpObject(): string;
     serialize(): string;
-    // Instance stuff.
+
+    // getProperty
+    // getArrayItem
+    // getStructField
+    // getQualifier
+    // setProperty
+    // setArrayItem
+    // insertArrayItem
+    // appendArrayItem
+    // countArrayItems
+    // setStructField
+    // setQualifier
+    // deleteProperty
+    // deleteArrayItem
+    // deleteStructField
+    // deleteQualifier
+    // doesPropertyExist
+    // doesArrayItemExist
+    // doesStructFieldExist
+    // doesQualifierExist
+    // getLocalizedText
+    // setLocalizedText
+    // iterator
+    // serialize
+    // serializeToArray
+    // dumpObject
+    // sort
 }
 
 declare const XMPMeta: XMPMetaConstructor | undefined;

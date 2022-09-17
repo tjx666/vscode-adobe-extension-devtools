@@ -1,14 +1,12 @@
 vscDevtools.exception = (function () {
-    'use strict';
-
     function getErrorDetails(e) {
-        var name = e.name;
-        var line = e.line;
-        var fileName = e.fileName;
-        var description = e.description;
-        var sourceLine = e.source.split(/[\r\n]/)[line - 1];
+        const name = e.name;
+        const line = e.line;
+        const fileName = e.fileName;
+        const description = e.description;
+        const sourceLine = e.source.split(/[\r\n]/)[line - 1];
         var errorDetails = name + ' ' + e.number + ': ' + description + '\nat:';
-        errorDetails += '\n  File: ' + fileName;
+        errorDetails += '\n  File: ' + fileName + ':' + line;
         errorDetails +=
             '\n  Line: ' +
             line +

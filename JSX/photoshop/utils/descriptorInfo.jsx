@@ -10,24 +10,19 @@
  *
  */
 
- vscDevtools.descriptorInfo = (function () {
-    /**
-     * 'a.b[2].c' => ['a', 'b', 2, 'c'];
-     * @param {string} propPathStr
-     * @returns {string[]}
-     */
-    function parsePropPathStrToArray(propPathStr) {
-        return propPathStr
-            .replaceAll(/^\[([^\r\n]*?)\]/g, '$1')
-            .replaceAll(/\[([^\r\n]*?)\]/g, '.$1')
-            .split('.')
-            .map(function (prop) {
-                var index = parseInt(prop, 10);
-                return isNaN(index) ? prop : index;
-            });
-    }
+ function getDefaultParams() {
+    return {
+        reference: false,
+        extended: false,
+        maxRawLimit: 10000,
+        maxXMPLimit: 10000,
+        includeKeys: ['*'],
+        excludeKeys: ['XMPMetadataAsUTF8'],
+    };
+}
 
-    
+vscDevtools.descriptorInfo = (function () {
+    var parsePropPathStrToArray = pse._.parsePropPathStrToArray;
 
     /**
      * @param {DescValueType} descType
@@ -41,9 +36,9 @@
      * Descriptor Info constructor.
      * @constructor
      */
-    function DescriptorInfo() {}
-
-    DescriptorInfo.defaultFilterKeys = ['XMPMetadataAsUTF8'];
+    function DescriptorInfo() {
+        this.descParams = getDefaultParams();
+    }
 
     /**
      * @public
@@ -58,18 +53,10 @@
      */
     DescriptorInfo.prototype.getProperties = function (desc, params) {
         params = params || {};
-        // Define params
-        this.descParams = {
-            reference: params.reference || false,
-            extended: params.extended || false,
-            maxRawLimit: params.maxRawLimit || 10000,
-            maxXMPLimit: params.maxXMPLimit || 10000,
-            saveToFile: params.saveToFile,
-            filterKeys: params.filterKeys || DescriptorInfo.defaultFilterKeys,
-        };
+        Object.assign(this.descParams, params);
 
         var descObject;
-        if (desc === '[ActionList]') {
+        if (desc instanceof ActionList) {
             descObject = this._getDescList(desc);
         } else {
             descObject = this._getDescObject(desc, {});
@@ -78,6 +65,9 @@
         if (this.descParams.saveToFile) {
             this._saveToFile(descObject, this.descParams.saveToFile);
         }
+
+        // reset params
+        this.descParams = getDefaultParams();
 
         return descObject;
     };
@@ -99,15 +89,14 @@
 
         var propPath = Array.isArray(path) ? path : parsePropPathStrToArray(path);
         var value = desc;
-        var key, keyTypeID, index, /** @type {DescValueType} */ itemDescType;
+        var key, keyTypeID, /** @type {DescValueType} */ itemDescType;
         while (propPath.length && value != null) {
             key = propPath.shift();
             itemDescType = undefined;
             keyTypeID = undefined;
-            index = undefined;
 
             if (value instanceof ActionDescriptor) {
-                keyTypeID = s2t(key);
+                keyTypeID = TypeID[key] || s2t(key);
                 if (!value.hasKey(keyTypeID)) {
                     value = undefined;
                     break;
@@ -134,7 +123,7 @@
         }
 
         if (isCompoundDescValueType(itemDescType)) {
-            value = this._getDescObject(value, {});
+            value = this.getProperties(value);
         }
 
         if (propPath.length === 0 && value === null) return null;
@@ -143,32 +132,14 @@
     };
 
     /**
-     * 获取图层某个属性路径的值
-     * @param {number | Layer} id
-     * @param {string | Array<string|number>} path
-     * @param {any} defaultValue
-     */
-    DescriptorInfo.prototype.getLayerProperty = function (id, path, defaultValue) {
-        if (typeof id !== 'number') {
-            id = id.id;
-        }
-
-        var propPath = Array.isArray(path) ? path : parsePropPathStrToArray(path);
-        if (propPath.length === 0)
-            throw new Error('At least one property, but you pass ' + JSON.stringify(path));
-
-        var property = propPath[0];
-        var layerDesc = vscDevtools.layer.getLayerDesc(id, property);
-        return this.get(layerDesc, propPath, defaultValue);
-    };
-
-    /**
      * @private
      * Handler function to get the items in an ActionDescriptor Object
      * @param {ActionDescriptor} desc
      * @param {object} descObject Empty object to return (required since it's a recursive function)
      */
-    DescriptorInfo.prototype._getDescObject = function (desc, descObject) {
+    DescriptorInfo.prototype._getDescObject = function (desc, descObject, level) {
+        var nextLevel = (level || 0) + 1;
+
         for (var i = 0; i < desc.count; i++) {
             var typeID = desc.getKey(i);
             var descType = desc.getType(typeID).toString();
@@ -177,7 +148,14 @@
                 descStringID = typeIDToStringID(typeID),
                 descCharID = typeIDToCharID(typeID);
 
-            if (this.descParams.filterKeys.includes(descStringID)) continue;
+            if (nextLevel === 1) {
+                var isIncluded = this.descParams.includeKeys.some(function (k) {
+                    return k === '*' || k === descStringID;
+                });
+                var isExcluded = this.descParams.excludeKeys.includes(descStringID);
+                var included = isIncluded && !isExcluded;
+                if (!included) continue;
+            }
 
             if (this.descParams.extended) {
                 descProperties = {
@@ -197,17 +175,21 @@
             switch (descType) {
                 case 'DescValueType.OBJECTTYPE':
                     if (this.descParams.extended) {
-                        descProperties.object = this._getDescObject(descProperties.value, {});
+                        descProperties.object = this._getDescObject(
+                            descProperties.value,
+                            {},
+                            nextLevel,
+                        );
                     } else {
-                        descProperties = this._getDescObject(descProperties, {});
+                        descProperties = this._getDescObject(descProperties, {}, nextLevel);
                     }
                     break;
 
                 case 'DescValueType.LISTTYPE':
                     if (this.descParams.extended) {
-                        descProperties.list = this._getDescList(descProperties.value);
+                        descProperties.list = this._getDescList(descProperties.value, nextLevel);
                     } else {
-                        descProperties = this._getDescList(descProperties);
+                        descProperties = this._getDescList(descProperties, nextLevel);
                     }
                     break;
 
@@ -283,24 +265,25 @@
      * Handler function to get the items in an ActionList
      * @param {Object} Action List
      */
-    DescriptorInfo.prototype._getDescList = function (list) {
+    DescriptorInfo.prototype._getDescList = function (list, level) {
+        var nextLevel = (level || 0) + 1;
         var listArray = [];
 
-        for (var ii = 0; ii < list.count; ii++) {
-            var listItemType = list.getType(ii).toString();
-            var listItemValue = this._getValue(list, listItemType, ii);
+        for (var i = 0; i < list.count; i++) {
+            var listItemType = list.getType(i).toString();
+            var listItemValue = this._getValue(list, listItemType, i);
 
             switch (listItemType) {
                 case 'DescValueType.OBJECTTYPE':
                     // var listItemOBJ = {};
 
                     var listItemProperties,
-                        descStringID = typeIDToStringID(list.getObjectType(ii));
+                        descStringID = typeIDToStringID(list.getObjectType(i));
 
                     if (this.descParams.extended) {
                         listItemProperties = {
                             stringID: descStringID,
-                            key: ii,
+                            key: i,
                             type: listItemType,
                             value: listItemValue,
                         };
@@ -314,7 +297,7 @@
                     break;
 
                 case 'DescValueType.LISTTYPE':
-                    listArray.push(this._getDescList(listItemValue));
+                    listArray.push(this._getDescList(listItemValue, nextLevel));
                     break;
 
                 case 'DescValueType.REFERENCETYPE':
