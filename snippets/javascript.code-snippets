@@ -4,5 +4,11 @@
         "prefix": "wl",
         "body": ["$.writeln('$0');"],
         "description": "ExtendScript output to stdout"
+    },
+    "ExtendScript Include Comment": {
+        "scope": "javascript",
+        "prefix": "@inc",
+        "body": ["// @include '$1'$0"],
+        "description": "ExtendScript include comment"
     }
 }
