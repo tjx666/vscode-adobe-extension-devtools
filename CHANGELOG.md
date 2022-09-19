@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.6] - 2022-09-18
+
+### Fixed
+
+- can upgrade to latest version
+
 ## [0.2.4] - 2022-09-18
 
 ### Changed
