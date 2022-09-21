@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.2.8] - 2022-09-21
+
+### Fixed
+
+- eval jsx exception
+
 ## [0.2.6] - 2022-09-18
 
 ### Fixed
