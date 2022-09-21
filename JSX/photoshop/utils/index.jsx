@@ -25,6 +25,7 @@
         // polyfill
         // @include '../../polyfill/json2.jsx'
         // @include '../../polyfill/Array.jsx'
+        // @include '../../polyfill/Object.jsx'
 
         // utils
         // @include '../../utils/exception.jsx'

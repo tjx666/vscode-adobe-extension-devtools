@@ -10,19 +10,28 @@
  *
  */
 
- function getDefaultParams() {
-    return {
-        reference: false,
-        extended: false,
-        maxRawLimit: 10000,
-        maxXMPLimit: 10000,
-        includeKeys: ['*'],
-        excludeKeys: ['XMPMetadataAsUTF8'],
-    };
-}
-
 vscDevtools.descriptorInfo = (function () {
-    var parsePropPathStrToArray = pse._.parsePropPathStrToArray;
+    function getDefaultParams() {
+        return {
+            reference: false,
+            extended: false,
+            maxRawLimit: 10000,
+            maxXMPLimit: 10000,
+            includeKeys: ['*'],
+            excludeKeys: ['XMPMetadataAsUTF8'],
+        };
+    }
+
+    /**
+     * @param {string} propPathStr
+     * @return {string[]}
+     */
+    function parsePropPathStrToArray(propPathStr) {
+        return propPathStr
+            .replaceAll(/^\[([^\r\n]*?)\]/g, '$1')
+            .replaceAll(/\[([^\r\n]*?)\]/g, '.$1')
+            .split('.');
+    }
 
     /**
      * @param {DescValueType} descType
