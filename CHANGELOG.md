@@ -1,5 +1,15 @@
 # Change Log
 
+## [0.2.9] - 2022-11-17
+
+### Fixed
+
+- jsx module cmd + hover doesn't show definition code
+
+### Changed
+
+- upgrade dependencies
+
 ## [0.2.8] - 2022-09-21
 
 ### Fixed
