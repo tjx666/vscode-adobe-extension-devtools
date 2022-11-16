@@ -1,7 +1,14 @@
 import pathUtils from 'path';
-import { Position, Uri, Range } from 'vscode';
-import type { CancellationToken, DefinitionProvider, TextDocument, DefinitionLink } from 'vscode';
+import type {
+  CancellationToken,
+  DefinitionLink,
+  DefinitionProvider,
+  TextDocument,
+} from 'vscode';
+import { Position, Range, Uri } from 'vscode';
+
 import { pathExists } from './utils/common';
+import { getFileWholeRange } from './utils/editor';
 
 class JsxModuleDefinitionProvider implements DefinitionProvider {
     async provideDefinition(
@@ -35,8 +42,9 @@ class JsxModuleDefinitionProvider implements DefinitionProvider {
             const definitionLink: DefinitionLink = {
                 originSelectionRange: new Range(startPosition, endPosition),
                 targetUri: Uri.file(definitionFilePath),
-                targetRange: new Range(new Position(0, 0), new Position(0, 0)),
+                targetRange: await getFileWholeRange(definitionFilePath),
             };
+
             return [definitionLink];
         }
 

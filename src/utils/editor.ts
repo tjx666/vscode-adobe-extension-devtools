@@ -1,4 +1,5 @@
-import { Uri, workspace, window, TextEditor, Range, Selection } from 'vscode';
+import fs from 'node:fs/promises';
+import { Position, Range, Selection, TextEditor, Uri, window, workspace } from 'vscode';
 
 export async function openDocument(document: Uri): Promise<void> {
     const textDocument = await workspace.openTextDocument(document);
@@ -47,4 +48,17 @@ export async function replaceActiveEditorSelectionsText(
             editBuilder.replace(selections[index], String(replaceText)),
         );
     });
+}
+
+export async function getFileWholeRange(filePath: string) {
+    const textContent = await fs.readFile(filePath, 'utf-8');
+    const lines = textContent.split(/\r?\n/);
+    const lastLine = lines.at(-1);
+    return new Range(
+        new Position(0, 0),
+        new Position(
+            Math.max(0, lines.length - 1),
+            lastLine === undefined ? 0 : Math.max(0, lastLine.length - 1),
+        ),
+    );
 }
